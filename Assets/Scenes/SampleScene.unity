@@ -303,7 +303,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 127.8, z: -26.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -339,14 +339,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snowBlockPrefab: {fileID: 4500182590525042551, guid: bad351c878112904cbbc404a34243224, type: 3}
-  iceBlockPrefab: {fileID: 6903941737923501819, guid: 5b2ce418e585ea244995c1c166f90419, type: 3}
+  iceBlockPrefab: {fileID: 8772164617101858029, guid: fa306266e6d7b2d47a760ef1081bdf80, type: 3}
   walkableBlockPrefab: {fileID: 361931056623277241, guid: 017654b38a60d604b9bb14fd5ee8bae9, type: 3}
-  enemySpawnPointPrefab: {fileID: 424513495, guid: b6bf0d28e0203fb4a8e2067fec1d2144, type: 3}
-  towerSpawnPointPrefab: {fileID: 1915596155084330893, guid: 9c090db9e060dc4468e6ed4e41e7dedd, type: 3}
-  width: 40
-  depth: 20
+  mainTowerPrefab: {fileID: 9104173931004687256, guid: 175f85191409d0e4f8b838111f722a0b, type: 3}
+  iceTreePrefab: {fileID: 98096134, guid: 80059089911c3984e842c36e5b0b4a6b, type: 3}
+  snowTreePrefab: {fileID: 891672925, guid: c1257b64e2732ef439af2f9e6030cda6, type: 3}
+  placeableBlockPrefab: {fileID: 1452641802217029215, guid: 410fa1947d1cc1246a20cef9517cf7d0, type: 3}
+  nonPlaceableBlockPrefab: {fileID: 6903941737923501819, guid: 5b2ce418e585ea244995c1c166f90419, type: 3}
+  gridSize: 30
   blockSize: 2
-  blocksPerFrame: 20
+  numberOfSnowTrees: 40
+  numberOfIceTrees: 20
 --- !u!4 &2091681138
 Transform:
   m_ObjectHideFlags: 0

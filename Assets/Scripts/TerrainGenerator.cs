@@ -4,135 +4,223 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public GameObject snowBlockPrefab; // Snow block prefab
-    public GameObject iceBlockPrefab; // Ice block prefab
-    public GameObject walkableBlockPrefab; // Walkable terrain block prefab
-    public GameObject enemySpawnPointPrefab; // Enemy spawn point prefab
-    public GameObject towerSpawnPointPrefab; // Player main tower prefab
-
-    public int width = 20; // Grid width
-    public int depth = 10; // Grid depth
+    public GameObject snowBlockPrefab;
+    public GameObject iceBlockPrefab;
+    public GameObject walkableBlockPrefab;
+    public GameObject mainTowerPrefab;
+    public GameObject iceTreePrefab;
+    public GameObject snowTreePrefab;
+    public GameObject placeableBlockPrefab; // Prefab for placeable defender blocks
+    public GameObject nonPlaceableBlockPrefab; // Prefab for non-placeable defender blocks
+    public int gridSize = 30; // 30x30 grid
     public float blockSize = 1.0f; // Size of each block
-    public int blocksPerFrame = 20; // How many blocks to generate per frame for faster generation
+    public int numberOfSnowTrees = 10; // Changeable number of snow trees to place
+    public int numberOfIceTrees = 5;  // Changeable number of ice trees to place
 
-    private GameObject[,] spawnedBlocks; // Track spawned blocks to avoid overlap
+    private bool[,] reservedGrid; // Grid to mark reserved areas (paths + border)
+    private List<Vector3> snowBlockPositions = new List<Vector3>(); // Store snow block positions for placing snow trees
+    private List<Vector3> iceBlockPositions = new List<Vector3>();  // Store ice block positions for placing ice trees
 
-    void Start()
+    private void Start()
     {
-        spawnedBlocks = new GameObject[width, depth]; // Track spawned blocks to avoid overlap
-        StartCoroutine(GenerateRandomizedTerrain()); // Start generating the terrain
+        reservedGrid = new bool[gridSize, gridSize]; // Initialize grid to track reserved blocks
+        GenerateSquareGrid();
     }
 
-    IEnumerator GenerateRandomizedTerrain()
+    // Generates the terrain and paths
+    void GenerateSquareGrid()
     {
-        int blocksGenerated = 0;
+        int centerX = gridSize / 2;
+        int centerZ = gridSize / 2;
 
-        for (int z = 0; z < depth; z++)
+        // Create the main tower in the center
+        Vector3 towerPosition = new Vector3(centerX * blockSize, 0, centerZ * blockSize);
+        Instantiate(mainTowerPrefab, towerPosition, Quaternion.identity, transform);
+
+        // Define the 3 path end points (equally spaced on the grid's edge)
+        Vector3[] pathEndPoints = new Vector3[3];
+
+        // First path: North (Z+)
+        pathEndPoints[0] = new Vector3(centerX * blockSize, 0, (gridSize - 1) * blockSize);
+        
+        // Second path: East (Right)
+        pathEndPoints[1] = new Vector3((gridSize - 1) * blockSize, 0, centerZ * blockSize);
+        
+        // Third path: West (Left)
+        pathEndPoints[2] = new Vector3(0, 0, centerZ * blockSize);
+
+        // Generate paths from the center (main tower) to the 3 edge points
+        for (int i = 0; i < pathEndPoints.Length; i++)
         {
-            for (int x = 0; x < width; x++)
-            {
-                // Randomly choose block type with a higher chance of snow block
-                GameObject blockToSpawn = GenerateTerrainBlock(x, z);
-
-                // Instantiate the block at the correct position
-                Vector3 position = new Vector3(x * blockSize, 0, z * blockSize);
-                GameObject newBlock = Instantiate(blockToSpawn, position, Quaternion.identity, transform);
-
-                // Track the newly spawned block
-                spawnedBlocks[x, z] = newBlock;
-
-                // Track the number of blocks generated per frame
-                blocksGenerated++;
-
-                // Once the set number of blocks has been generated, yield to the next frame
-                if (blocksGenerated >= blocksPerFrame)
-                {
-                    blocksGenerated = 0;
-                    yield return null; // Pause and wait for the next frame
-                }
-            }
+            GeneratePath(new Vector3(centerX * blockSize, 0, centerZ * blockSize), pathEndPoints[i]);
         }
 
-        // Place spawn points after the terrain is generated
-        PlaceSpawnPoints();
+        // Generate the rest of the terrain
+        GenerateTerrain(gridSize);
 
-        // Once the terrain is generated, create the walkable paths
-        GenerateStraightPaths();
+        // Generate the raised border between terrain and paths
+        GenerateBorder();
+
+        // Place snow and ice trees
+        PlaceSnowTrees();
+        PlaceIceTrees();
     }
 
-    GameObject GenerateTerrainBlock(int x, int z)
-    {
-        // Check if we are in an area that should clump ice into a pond
-        if (Random.value < 0.2f) // 20% chance to create an ice pond
-        {
-            return iceBlockPrefab;
-        }
-        else // The rest will be snow blocks
-        {
-            return snowBlockPrefab;
-        }
-    }
-
-    void PlaceSpawnPoints()
-    {
-        // Place enemy spawn point at the left side of the grid, centered vertically
-        Vector3 enemySpawnPosition = new Vector3(0 * blockSize, 0, (depth / 2) * blockSize);
-        Instantiate(enemySpawnPointPrefab, enemySpawnPosition, Quaternion.identity, transform);
-
-        // Place player tower at the right side of the grid, centered vertically
-        Vector3 towerSpawnPosition = new Vector3((width - 1) * blockSize, 0, (depth / 2) * blockSize);
-        Instantiate(towerSpawnPointPrefab, towerSpawnPosition, Quaternion.identity, transform);
-    }
-
-    void GenerateStraightPaths()
+    // Generates a straight path from start to end and reserves a border around it
+    void GeneratePath(Vector3 start, Vector3 end)
     {
         int pathWidth = 2; // Width of each path
-        int numPaths = 3; // Number of paths
 
-        // Define the start (enemy spawn) and end (player tower) locations
-        Vector3 start = new Vector3(0, 0, depth / 2); // Enemy spawn point
-        Vector3 end = new Vector3(width - 1, 0, depth / 2); // Player tower point
+        // Direction and distance
+        Vector3 direction = (end - start).normalized;
+        float distance = Vector3.Distance(start, end);
 
-        // Define spacing between paths
-        float pathSpacing = 4.0f; // Distance between the center of each path
-
-        // Calculate start and end positions for each path
-        Vector3[] pathStarts = new Vector3[numPaths];
-        Vector3[] pathEnds = new Vector3[numPaths];
-
-        for (int i = 0; i < numPaths; i++)
+        // Create the path along the calculated direction
+        for (float i = 0; i <= distance; i += blockSize)
         {
-            float offset = (i - (numPaths - 1) / 2f) * pathSpacing;
-            pathStarts[i] = new Vector3(start.x, start.y, start.z + offset);
-            pathEnds[i] = new Vector3(end.x, end.y, end.z + offset);
-        }
+            Vector3 pathPosition = start + direction * i;
 
-        // Create paths
-        for (int i = 0; i < numPaths; i++)
-        {
-            Vector3 startPosition = pathStarts[i];
-            Vector3 endPosition = pathEnds[i];
-
-            // Generate path from start to end
-            for (int x = Mathf.RoundToInt(startPosition.x); x <= Mathf.RoundToInt(endPosition.x); x++)
+            for (int j = -pathWidth / 2; j <= pathWidth / 2; j++)
             {
-                float t = (x - startPosition.x) / (endPosition.x - startPosition.x);
-                float z = Mathf.Lerp(startPosition.z, endPosition.z, t);
+                Vector3 offset = Vector3.Cross(direction, Vector3.up) * j * blockSize;
+                Vector3 blockPosition = pathPosition + offset;
 
-                for (int j = -pathWidth / 2; j <= pathWidth / 2; j++)
+                // Remove any existing terrain block at this position
+                Collider[] hitColliders = Physics.OverlapBox(blockPosition, Vector3.one * (blockSize / 2));
+                foreach (var hitCollider in hitColliders)
                 {
-                    int zPos = Mathf.Clamp(Mathf.RoundToInt(z) + j, 0, depth - 1);
+                    Destroy(hitCollider.gameObject);
+                }
 
-                    // Destroy existing blocks and place walkable blocks
-                    if (spawnedBlocks[x, zPos] != null)
+                // Lower the path by 0.3 units on the Y axis
+                blockPosition.y -= 0.3f;
+
+                // Place walkable path block
+                Instantiate(walkableBlockPrefab, blockPosition, Quaternion.identity, transform);
+
+                // Mark path blocks as reserved
+                reservedGrid[(int)(blockPosition.x / blockSize), (int)(blockPosition.z / blockSize)] = true;
+            }
+        }
+    }
+
+    // Generates the raised border between the terrain and paths
+    void GenerateBorder()
+    {
+        int borderWidth = 2; // Width of the border around paths
+
+        for (int x = 0; x < gridSize; x++)
+        {
+            for (int z = 0; z < gridSize; z++)
+            {
+                // Only place border blocks between terrain and paths
+                if (reservedGrid[x, z] == false && IsBorder(x, z, borderWidth))
+                {
+                    Vector3 position = new Vector3(x * blockSize, 0.5f, z * blockSize); // Raised by 0.5 units
+
+                    // Alternate between placeable and non-placeable blocks in a 2x2 pattern
+                    if ((x / 2 + z / 2) % 2 == 0)
                     {
-                        Destroy(spawnedBlocks[x, zPos]);
+                        Instantiate(placeableBlockPrefab, position, Quaternion.identity, transform);
                     }
-
-                    Vector3 position = new Vector3(x * blockSize, 0, zPos * blockSize);
-                    Instantiate(walkableBlockPrefab, position, Quaternion.identity, transform);
+                    else
+                    {
+                        Instantiate(nonPlaceableBlockPrefab, position, Quaternion.identity, transform);
+                    }
                 }
             }
+        }
+    }
+
+    // Check if a block is part of the border
+    bool IsBorder(int x, int z, int borderWidth)
+    {
+        for (int dx = -borderWidth; dx <= borderWidth; dx++)
+        {
+            for (int dz = -borderWidth; dz <= borderWidth; dz++)
+            {
+                if (x + dx >= 0 && x + dx < gridSize && z + dz >= 0 && z + dz < gridSize)
+                {
+                    if (reservedGrid[x + dx, z + dz] == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // Generates the rest of the terrain (snow and ice blocks)
+    void GenerateTerrain(int gridSize)
+    {
+        for (int x = 0; x < gridSize; x++)
+        {
+            for (int z = 0; z < gridSize; z++)
+            {
+                Vector3 position = new Vector3(x * blockSize, 0, z * blockSize);
+
+                // Skip terrain generation if it's reserved for paths or borders
+                if (reservedGrid[x, z])
+                    continue;
+
+                // Randomly select between snow and ice blocks (more snow than ice)
+                GameObject blockPrefab = Random.value < 0.8f ? snowBlockPrefab : iceBlockPrefab; // 80% snow, 20% ice
+
+                // Instantiate block
+                GameObject block = Instantiate(blockPrefab, position, Quaternion.identity, transform);
+
+                if (blockPrefab == iceBlockPrefab)
+                {
+                    // Store the position for ice tree placement later
+                    iceBlockPositions.Add(position);
+                }
+                else
+                {
+                    // Store the position for snow tree placement later
+                    snowBlockPositions.Add(position);
+                }
+            }
+        }
+    }
+
+    // Places a specified number of snow trees on random snow blocks
+    void PlaceSnowTrees()
+    {
+        // Shuffle the snow block positions to randomize tree placement
+        for (int i = 0; i < snowBlockPositions.Count; i++)
+        {
+            Vector3 temp = snowBlockPositions[i];
+            int randomIndex = Random.Range(i, snowBlockPositions.Count);
+            snowBlockPositions[i] = snowBlockPositions[randomIndex];
+            snowBlockPositions[randomIndex] = temp;
+        }
+
+        // Place snow trees on the first 'numberOfSnowTrees' snow blocks
+        for (int i = 0; i < Mathf.Min(numberOfSnowTrees, snowBlockPositions.Count); i++)
+        {
+            Vector3 treePosition = new Vector3(snowBlockPositions[i].x, snowBlockPositions[i].y + blockSize, snowBlockPositions[i].z);
+            Instantiate(snowTreePrefab, treePosition, Quaternion.identity, transform);
+        }
+    }
+
+    // Places a specified number of ice trees on random ice blocks
+    void PlaceIceTrees()
+    {
+        // Shuffle the ice block positions to randomize tree placement
+        for (int i = 0; i < iceBlockPositions.Count; i++)
+        {
+            Vector3 temp = iceBlockPositions[i];
+            int randomIndex = Random.Range(i, iceBlockPositions.Count);
+            iceBlockPositions[i] = iceBlockPositions[randomIndex];
+            iceBlockPositions[randomIndex] = temp;
+        }
+
+        // Place ice trees on the first 'numberOfIceTrees' ice blocks
+        for (int i = 0; i < Mathf.Min(numberOfIceTrees, iceBlockPositions.Count); i++)
+        {
+            Vector3 treePosition = new Vector3(iceBlockPositions[i].x, iceBlockPositions[i].y + blockSize, iceBlockPositions[i].z);
+            Instantiate(iceTreePrefab, treePosition, Quaternion.identity, transform);
         }
     }
 }
