@@ -393,7 +393,7 @@ MonoBehaviour:
   gridSize: 40
   heightVariation: 3
   pathWidth: 3
-  platformCountPerSide: 4
+  platformCountPerSide: 3
 --- !u!4 &2091681138
 Transform:
   m_ObjectHideFlags: 0
