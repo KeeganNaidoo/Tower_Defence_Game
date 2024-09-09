@@ -347,6 +347,11 @@ MonoBehaviour:
   heightVariation: 3
   pathWidth: 3
   platformCountPerSide: 3
+  treePrefabs:
+  - {fileID: 1453280394, guid: 88a9a6b9fc80bee41a08daf2099bcfe4, type: 3}
+  - {fileID: 1226497652, guid: 57bb9dc1fb68744429b341ee1c044f5e, type: 3}
+  - {fileID: 470977218, guid: ee7724bd8f19cb942a3a296ee568247b, type: 3}
+  maxTrees: 80
 --- !u!4 &2091681138
 Transform:
   m_ObjectHideFlags: 0

@@ -13,16 +13,22 @@ public class TerrainGenerator : MonoBehaviour
 
     [Header("Terrain Settings")]
     public int gridSize = 40;             // 40x40 grid
-    public float heightVariation = 4f;    // Max height variation
+    public float heightVariation = 4f;
+    
 
     [Header("Path Settings")]
     public int pathWidth = 3;             // Width of each path
     public int platformCountPerSide = 3;  // Number of platforms per side of each path
+    
+    [Header("Tree Settings")]
+    public GameObject[] treePrefabs;    // Array of tree prefabs (3 types of trees)
+    public int maxTrees = 50;           // Limiter for total number of trees to spawn
 
     // Offsets for Perlin Noise to ensure different terrain each play
     private float noiseOffsetX;
     private float noiseOffsetZ;
 
+    private List<Vector3> availableSnowPositions = new List<Vector3>(); // Positions of available snow blocks
     // HashSet to track positions occupied by paths and platforms
     private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
 
@@ -36,8 +42,10 @@ public class TerrainGenerator : MonoBehaviour
         CreatePaths();
         CreateDefenderPlatforms();
         SpawnMainTower();
+        GenerateRandomTrees();
     }
 
+    // Generates the terrain with snow and ice blocks and stores snow block positions
     void GenerateTerrain()
     {
         for (int x = 0; x < gridSize; x++)
@@ -54,15 +62,23 @@ public class TerrainGenerator : MonoBehaviour
 
                 // Randomly choose between snow and ice blocks (80% snow, 20% ice)
                 GameObject blockPrefab = Random.value > 0.2f ? snowBlockPrefab : iceBlockPrefab;
+                
 
                 // Calculate Perlin Noise height with dynamic offsets
                 float noiseScale = 0.1f; // Adjust for more or less variation
                 float height = Mathf.PerlinNoise((x + noiseOffsetX) * noiseScale, (z + noiseOffsetZ) * noiseScale) * heightVariation;
+                Vector3 blockPosition = new Vector3(x, Mathf.Floor(height), z);
 
                 // Instantiate block at calculated position
                 Vector3 position = new Vector3(x, height, z);
                 GameObject block = Instantiate(blockPrefab, position, Quaternion.identity);
                 block.transform.SetParent(this.transform);
+                
+                // Add snow block positions to the list for tree placement
+                if (blockPrefab == snowBlockPrefab)
+                {
+                    availableSnowPositions.Add(blockPosition);
+                }
             }
         }
     }
@@ -187,5 +203,62 @@ void CreatePlatform(Vector3 position)
         
         // Instantiate the main tower
         Instantiate(mainTowerPrefab, towerPosition, Quaternion.identity, this.transform);
+    }
+    
+    // Randomly generates trees on available snow blocks, avoiding paths and platforms
+    void GenerateRandomTrees()
+    {
+        int treeCount = 0;
+
+        while (treeCount < maxTrees && availableSnowPositions.Count > 0)
+        {
+            int randomIndex = Random.Range(0, availableSnowPositions.Count);
+            Vector3 treePosition = availableSnowPositions[randomIndex];
+
+            treePosition.y += 1;
+
+            Vector3 checkPosition = new Vector3(treePosition.x, 0, treePosition.z);
+
+            // Check if the tree is trying to be placed on an occupied position
+            if (!IsPositionOccupied(checkPosition))
+            {
+                GameObject randomTreePrefab = treePrefabs[Random.Range(0, treePrefabs.Length)];
+                Instantiate(randomTreePrefab, treePosition, Quaternion.identity, this.transform);
+
+                treeCount++;
+            }
+
+            availableSnowPositions.RemoveAt(randomIndex);
+        }
+    }
+
+    // Checks if a given position (ignoring Y) is occupied by paths, platforms, or within the 1-block buffer
+    bool IsPositionOccupied(Vector3 position)
+    {
+        foreach (Vector3 occupied in occupiedPositions)
+        {
+            // We check if the position is within 1 block of any occupied position in the X or Z directions
+            if (Mathf.Abs(occupied.x - position.x) <= 1 && Mathf.Abs(occupied.z - position.z) <= 1)
+            {
+                return true;  // The position or its surrounding area is occupied
+            }
+        }
+        return false;  // The position is free for tree placement
+    }
+
+    // Adds the occupied position and a 1-block buffer around it to the occupiedPositions set
+    void AddToOccupiedWithBuffer(Vector3 position)
+    {
+        occupiedPositions.Add(position);
+
+        // Add surrounding positions to the occupiedPositions set to create the 1-block buffer
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dz = -1; dz <= 1; dz++)
+            {
+                Vector3 bufferedPosition = new Vector3(position.x + dx, position.y, position.z + dz);
+                occupiedPositions.Add(bufferedPosition);
+            }
+        }
     }
 }
