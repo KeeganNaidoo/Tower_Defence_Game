@@ -1876,7 +1876,7 @@ GameObject:
   - component: {fileID: 8947477974400731321}
   - component: {fileID: 8947477974401731193}
   m_Layer: 0
-  m_Name: WinterCastle_v2_Blue
+  m_Name: Players_MainTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

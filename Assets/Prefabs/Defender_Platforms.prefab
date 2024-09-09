@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 7111167667687284802}
   - component: {fileID: 7111167667687284805}
   m_Layer: 0
-  m_Name: Tower_W_Blue
+  m_Name: Defender_Platforms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
