@@ -127,30 +127,38 @@ public class TerrainGenerator : MonoBehaviour
     void CreatePlatformsAlongPath(Vector3 direction, float x, float z)
     {
         // Adjust position for platforms relative to paths and elevate them by 1 block (Y = 3)
-        Vector3 leftSidePlatform = new Vector3(x - pathWidth / 2 - 1, 3, z);
-        Vector3 rightSidePlatform = new Vector3(x + pathWidth / 2 + 1, 3, z);
+        // Shift platforms an additional block further away from the path (distance = 2 units)
+        Vector3 leftSidePlatform = new Vector3(x - pathWidth / 2 - 2, 4, z); // Shift 2 blocks left
+        Vector3 rightSidePlatform = new Vector3(x + pathWidth / 2 + 2, 4, z); // Shift 2 blocks right
 
-        // Record occupied positions and instantiate platforms
-        CreatePlatform(leftSidePlatform);
-        CreatePlatform(rightSidePlatform);
+        // Ensure platforms don't interfere with the main tower at the center
+        if (Mathf.Abs(leftSidePlatform.x - gridSize / 2) > 2 && Mathf.Abs(leftSidePlatform.z - gridSize / 2) > 2)
+        {
+            CreatePlatform(leftSidePlatform);
+        }
+
+        if (Mathf.Abs(rightSidePlatform.x - gridSize / 2) > 2 && Mathf.Abs(rightSidePlatform.z - gridSize / 2) > 2)
+        {
+            CreatePlatform(rightSidePlatform);
+        }
     }
 
     void CreatePlatform(Vector3 position)
     {
         // Record the position as occupied
-        Vector3 occupiedPosition = new Vector3(position.x, 4, position.z); // Set Y to 3 for platform
+        Vector3 occupiedPosition = new Vector3(position.x, 2f, position.z); // Set Y to 3 for platform
         occupiedPositions.Add(occupiedPosition);
 
         // Instantiate a platform block (use the specified prefab)
         GameObject platform = Instantiate(platformPrefab, occupiedPosition, Quaternion.identity);
-        platform.transform.localScale = new Vector3(1, 0.5f, 1);  // Adjust size if needed
+        platform.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);  // Adjust size if needed
         platform.transform.SetParent(this.transform);
     }
 
     void SpawnMainTower()
     {
         // The tower will be placed at the center of the grid where the paths converge
-        Vector3 towerPosition = new Vector3(gridSize / 2, 4, gridSize / 2);  // Tower is on platform level (Y = 3)
+        Vector3 towerPosition = new Vector3(gridSize / 2, 3, gridSize / 2);  // Tower is on platform level (Y = 3)
         
         // Instantiate the main tower
         Instantiate(mainTowerPrefab, towerPosition, Quaternion.identity, this.transform);
