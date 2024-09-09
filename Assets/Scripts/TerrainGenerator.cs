@@ -24,7 +24,7 @@ public class TerrainGenerator : MonoBehaviour
     private float noiseOffsetZ;
 
     // HashSet to track positions occupied by paths and platforms
-    private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
+    public HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
 
     void Start()
     {
