@@ -83,82 +83,107 @@ public class TerrainGenerator : MonoBehaviour
     {
         int halfWidth = pathWidth / 2;
 
-        for (int i = 0; i < gridSize / 2; i++)
+        for (int i = 0; i <= gridSize / 2; i++) // Fixed to iterate through half the grid size for correct path length
         {
             Vector3 pathPosition = startPosition + direction * i;
 
-            // Create a path block for each position within the path width
             for (int w = -halfWidth; w <= halfWidth; w++)
             {
                 Vector3 blockPosition;
 
                 if (direction == Vector3.back || direction == Vector3.forward)
                 {
-                    blockPosition = pathPosition + new Vector3(w, 0, 0);
+                    // Path from North or South (affects Z axis)
+                    blockPosition = pathPosition + new Vector3(w, 0, 0); // Modify X-axis width
                 }
-                else // Vector3.right or Vector3.left
+                else
                 {
-                    blockPosition = pathPosition + new Vector3(0, 0, w);
+                    // Path from West or East (affects X axis)
+                    blockPosition = pathPosition + new Vector3(0, 0, w); // Modify Z-axis width
                 }
 
-                // Record the position as occupied
-                Vector3 occupiedPosition = new Vector3(blockPosition.x, 3, blockPosition.z); // Set Y to 2 for path
+                // Set the block to path height (level 3)
+                Vector3 occupiedPosition = new Vector3(blockPosition.x, 3, blockPosition.z);
                 occupiedPositions.Add(occupiedPosition);
 
-                // Instantiate path block at elevated height (Y = 2)
+                // Instantiate path block at calculated position
                 Instantiate(pathBlockPrefab, occupiedPosition, Quaternion.identity, this.transform);
             }
         }
     }
 
     void CreateDefenderPlatforms()
-    {
-        int sideSpacing = gridSize / (2 * platformCountPerSide); // Determine spacing between platforms on each side
+{
+    int sideSpacing = gridSize / (2 * platformCountPerSide); // Determine spacing between platforms on each side
 
-        for (int i = 0; i < platformCountPerSide; i++)
-        {
-            // Create platforms for each side of the north, west, and east paths
-            CreatePlatformsAlongPath(Vector3.back, gridSize / 2, gridSize - 1 - (sideSpacing * i));
-            CreatePlatformsAlongPath(Vector3.right, gridSize / 2 - (sideSpacing * i), gridSize / 2);
-            CreatePlatformsAlongPath(Vector3.left, gridSize / 2 + (sideSpacing * i), gridSize / 2);
-        }
+    // Platforms along the north path
+    for (int i = 0; i < platformCountPerSide; i++)
+    {
+        // Platform on the left and right side of the north path
+        CreatePlatformsAlongPath(Vector3.back, gridSize / 2, gridSize - 1 - (sideSpacing * i));
     }
 
-    void CreatePlatformsAlongPath(Vector3 direction, float x, float z)
+    // Platforms along the west path
+    for (int i = 0; i < platformCountPerSide; i++)
     {
-        // Adjust position for platforms relative to paths and elevate them by 1 block (Y = 3)
-        // Shift platforms an additional block further away from the path (distance = 2 units)
-        Vector3 leftSidePlatform = new Vector3(x - pathWidth / 2 - 2, 4, z); // Shift 2 blocks left
-        Vector3 rightSidePlatform = new Vector3(x + pathWidth / 2 + 2, 4, z); // Shift 2 blocks right
-
-        // Ensure platforms don't interfere with the main tower at the center
-        if (Mathf.Abs(leftSidePlatform.x - gridSize / 2) > 2 && Mathf.Abs(leftSidePlatform.z - gridSize / 2) > 2)
-        {
-            CreatePlatform(leftSidePlatform);
-        }
-
-        if (Mathf.Abs(rightSidePlatform.x - gridSize / 2) > 2 && Mathf.Abs(rightSidePlatform.z - gridSize / 2) > 2)
-        {
-            CreatePlatform(rightSidePlatform);
-        }
+        // Platform on the left and right side of the west path
+        CreatePlatformsAlongPath(Vector3.right, 1 + (sideSpacing * i), gridSize / 2); // Adjust position for west path platforms
     }
 
-    void CreatePlatform(Vector3 position)
+    // Platforms along the east path
+    for (int i = 0; i < platformCountPerSide; i++)
     {
-        // Record the position as occupied
-        Vector3 occupiedPosition = new Vector3(position.x, 2f, position.z); // Set Y to 3 for platform
-        occupiedPositions.Add(occupiedPosition);
-
-        // Instantiate a platform block (use the specified prefab)
-        GameObject platform = Instantiate(platformPrefab, occupiedPosition, Quaternion.identity);
-        platform.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);  // Adjust size if needed
-        platform.transform.SetParent(this.transform);
+        // Platform on the left and right side of the east path
+        CreatePlatformsAlongPath(Vector3.left, gridSize - 1 - (sideSpacing * i), gridSize / 2); // Adjust position for east path platforms
     }
+}
+
+void CreatePlatformsAlongPath(Vector3 direction, float x, float z)
+{
+    // Adjust position for platforms relative to paths and elevate them by 1 block (Y = 3)
+    Vector3 leftSidePlatform, rightSidePlatform;
+
+    if (direction == Vector3.back || direction == Vector3.forward)
+    {
+        // Path is along Z-axis (north/south)
+        leftSidePlatform = new Vector3(x - pathWidth / 2 - 2, 3, z);  // Shift platforms 2 blocks to the left of the path
+        rightSidePlatform = new Vector3(x + pathWidth / 2 + 2, 3, z); // Shift platforms 2 blocks to the right of the path
+    }
+    else
+    {
+        // Path is along X-axis (west/east)
+        leftSidePlatform = new Vector3(x, 3, z - pathWidth / 2 - 2);  // Shift platforms 2 blocks below the path
+        rightSidePlatform = new Vector3(x, 3, z + pathWidth / 2 + 2); // Shift platforms 2 blocks above the path
+    }
+
+    // Ensure platforms don't interfere with the main tower at the center
+    if (Mathf.Abs(leftSidePlatform.x - gridSize / 2) > 2 && Mathf.Abs(leftSidePlatform.z - gridSize / 2) > 2)
+    {
+        CreatePlatform(leftSidePlatform);
+    }
+
+    if (Mathf.Abs(rightSidePlatform.x - gridSize / 2) > 2 && Mathf.Abs(rightSidePlatform.z - gridSize / 2) > 2)
+    {
+        CreatePlatform(rightSidePlatform);
+    }
+}
+
+void CreatePlatform(Vector3 position)
+{
+    // Record the position as occupied
+    Vector3 occupiedPosition = new Vector3(position.x, 2, position.z); // Set Y to 3 for platform
+    occupiedPositions.Add(occupiedPosition);
+
+    // Instantiate a platform block (use the specified prefab)
+    GameObject platform = Instantiate(platformPrefab, occupiedPosition, Quaternion.identity);
+    platform.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);  // Adjust size if needed
+    platform.transform.SetParent(this.transform);
+}
 
     void SpawnMainTower()
     {
         // The tower will be placed at the center of the grid where the paths converge
-        Vector3 towerPosition = new Vector3(gridSize / 2, 3, gridSize / 2);  // Tower is on platform level (Y = 3)
+        Vector3 towerPosition = new Vector3(gridSize / 2, 4, gridSize / 2);  // Tower is on platform level (Y = 5)
         
         // Instantiate the main tower
         Instantiate(mainTowerPrefab, towerPosition, Quaternion.identity, this.transform);
