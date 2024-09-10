@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
+using UnityEngine.AI;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
@@ -18,6 +20,9 @@ public class TerrainGenerator : MonoBehaviour
     [Header("Path Settings")]
     public int pathWidth = 3;             // Width of each path
     public int platformCountPerSide = 3;  // Number of platforms per side of each path
+    
+    [Header("NavMesh Settings")]
+    public NavMeshSurface navMeshSurface;  // Reference to the NavMeshSurface component
 
     // Offsets for Perlin Noise to ensure different terrain each play
     private float noiseOffsetX;
@@ -36,6 +41,8 @@ public class TerrainGenerator : MonoBehaviour
         CreatePaths();
         CreateDefenderPlatforms();
         SpawnMainTower();
+        
+        BakeNavMesh();
     }
 
     void GenerateTerrain()
@@ -188,4 +195,11 @@ void CreatePlatform(Vector3 position)
         // Instantiate the main tower
         Instantiate(mainTowerPrefab, towerPosition, Quaternion.identity, this.transform);
     }
+    
+    // Function to bake the NavMesh after everything is generated
+    void BakeNavMesh()
+    {
+        navMeshSurface.BuildNavMesh();  // Bake the NavMesh at runtime
+    }
+
 }
