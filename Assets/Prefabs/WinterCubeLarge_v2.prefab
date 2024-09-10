@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 831975717134532987}
   - component: {fileID: 3173190582575577070}
   - component: {fileID: 1331452797584284590}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WinterCubeLarge_v2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
