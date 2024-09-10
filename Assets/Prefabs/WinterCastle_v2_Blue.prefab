@@ -1971,9 +1971,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerHealth: 500
+  maxTowerHealth: 500
   attackDamage: 80
   attackRange: 7
   attackCooldown: 2
+  towerHealthBar: {fileID: 7458273212032259364, guid: ae9c8f311ea3c84449b126ea6db1f5c6, type: 3}
+  towerHealthText: {fileID: 0}
 --- !u!65 &6672402522161627198
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -1,15 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tower : MonoBehaviour
 {
     public float towerHealth = 500f;        // Tower health
+    public float maxTowerHealth = 500f;
     public float attackDamage = 20f;        // Damage dealt to enemies
     public float attackRange = 10f;         // Range to detect and attack enemies
     public float attackCooldown = 2f;       // Time between each attack
+    public Slider towerHealthBar;
+    public Text towerHealthText;
 
     private float attackCooldownTimer;      // Timer to manage attack intervals
+    
+    void Start()
+    {
+        // Set initial health bar value
+        if (towerHealthBar != null)
+        {
+            towerHealthBar.maxValue = maxTowerHealth;
+            towerHealthBar.value = towerHealth;
+        }
+
+        // Set initial health text
+        if (towerHealthText != null)
+        {
+            towerHealthText.text = $"Health: {towerHealth}/{maxTowerHealth}";
+        }
+    }
 
     void Update()
     {
@@ -32,6 +52,17 @@ public class Tower : MonoBehaviour
         if (attackCooldownTimer > 0f)
         {
             attackCooldownTimer -= Time.deltaTime;
+        }
+        
+        // Update the health bar and text if the health changes
+        if (towerHealthBar != null)
+        {
+            towerHealthBar.value = towerHealth;
+        }
+
+        if (towerHealthText != null)
+        {
+            towerHealthText.text = $"Health: {towerHealth}/{maxTowerHealth}";
         }
     }
 

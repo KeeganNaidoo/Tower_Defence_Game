@@ -453,10 +453,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0de52a987c45f0347be5af4435092791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  enemyHealth: 100
   damage: 10
   attackRange: 2
   attackCooldown: 2
+  maxEnemyHealth: 100
+  currentHealth: 0
+  healthBarPrefab: {fileID: 440658152503171102, guid: 7874a9126a8bd13449984130a6491339, type: 3}
 --- !u!195 &2972966199692476632
 NavMeshAgent:
   m_ObjectHideFlags: 0
