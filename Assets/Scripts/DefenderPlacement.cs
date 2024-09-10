@@ -66,7 +66,7 @@ public class DefenderPlacement : MonoBehaviour
                 Debug.Log("Valid platform detected!");
 
                 // Check if the platform is already occupied by a defender
-                if (!IsPlatformOccupied(roundedPosition))
+                if (!occupiedPositions.Contains(roundedPosition))
                 {
                     // Add a slight height offset to ensure the defender is above the platform
                     Vector3 placementPosition = new Vector3(
@@ -77,6 +77,9 @@ public class DefenderPlacement : MonoBehaviour
 
                     // Place a defender on the platform
                     Instantiate(defenderPrefab, placementPosition, Quaternion.identity);
+
+                    // Mark this platform as occupied
+                    occupiedPositions.Add(roundedPosition);
 
                     // Debug: Defender placed message
                     Debug.Log("Defender placed!");
@@ -97,7 +100,6 @@ public class DefenderPlacement : MonoBehaviour
         }
     }
 
-
     bool IsPositionValid(Vector3 position)
     {
         // Check if the position is within a tolerance of any occupied position
@@ -113,17 +115,5 @@ public class DefenderPlacement : MonoBehaviour
         return false;
     }
 
-    bool IsPlatformOccupied(Vector3 position)
-    {
-        // Cast a small sphere to check if there's already a defender on the platform
-        Collider[] colliders = Physics.OverlapSphere(position, 0.5f); // Adjust radius as needed
-        foreach (Collider collider in colliders)
-        {
-            if (collider.CompareTag("Defender"))
-            {
-                return true; // Platform is already occupied
-            }
-        }
-        return false; // Platform is free for placement
-    }
+    // The IsPlatformOccupied method is no longer needed as we are tracking positions in occupiedPositions set
 }
