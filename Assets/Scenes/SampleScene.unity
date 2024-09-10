@@ -19915,7 +19915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d65707797390094ba7c651b55a76a11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defenderPrefab: {fileID: 1160215404191106889, guid: 8f5810a65e658b643b4731070d59636f, type: 3}
+  defenderPrefab: {fileID: 5459650239087229939, guid: dc1284f02220c3642857b589678de9b1, type: 3}
   mainCamera: {fileID: 963194227}
   terrainGenerator: {fileID: 2091681137}
 --- !u!4 &1610883111
