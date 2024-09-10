@@ -51,7 +51,7 @@ public class DefenderPlacement : MonoBehaviour
             Vector3 clickedPosition = hit.point;
             Vector3 roundedPosition = new Vector3(
                 Mathf.Round(clickedPosition.x),
-                platformHeight,
+                platformHeight,  // This remains the same for checking valid platforms
                 Mathf.Round(clickedPosition.z)
             );
 
@@ -68,8 +68,15 @@ public class DefenderPlacement : MonoBehaviour
                 // Check if the platform is already occupied by a defender
                 if (!IsPlatformOccupied(roundedPosition))
                 {
+                    // Add a slight height offset to ensure the defender is above the platform
+                    Vector3 placementPosition = new Vector3(
+                        roundedPosition.x,
+                        platformHeight + 2.0f,  // Adjust Y-axis to place the defender slightly above the platform
+                        roundedPosition.z
+                    );
+
                     // Place a defender on the platform
-                    Instantiate(defenderPrefab, roundedPosition, Quaternion.identity);
+                    Instantiate(defenderPrefab, placementPosition, Quaternion.identity);
 
                     // Debug: Defender placed message
                     Debug.Log("Defender placed!");
@@ -89,6 +96,7 @@ public class DefenderPlacement : MonoBehaviour
             Debug.Log("Raycast did not hit any object.");
         }
     }
+
 
     bool IsPositionValid(Vector3 position)
     {
