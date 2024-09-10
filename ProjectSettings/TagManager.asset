@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Defender
   - MainTower
+  - Enemy
   layers:
   - Default
   - TransparentFX
