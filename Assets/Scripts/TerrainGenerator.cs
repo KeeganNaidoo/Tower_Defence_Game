@@ -27,6 +27,12 @@ public class TerrainGenerator : MonoBehaviour
     // Offsets for Perlin Noise to ensure different terrain each play
     private float noiseOffsetX;
     private float noiseOffsetZ;
+    
+    [Header("Tree Settings")]
+    public GameObject[] treePrefabs;
+    public int maxTrees = 50;
+
+    private List<Vector3> availableSnowPositions = new List<Vector3>();
 
     // HashSet to track positions occupied by paths and platforms
     public HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
@@ -41,7 +47,7 @@ public class TerrainGenerator : MonoBehaviour
         CreatePaths();
         CreateDefenderPlatforms();
         SpawnMainTower();
-        
+        GenerateRandomTrees();
         BakeNavMesh();
     }
 
@@ -66,10 +72,16 @@ public class TerrainGenerator : MonoBehaviour
                 float noiseScale = 0.1f; // Adjust for more or less variation
                 float height = Mathf.PerlinNoise((x + noiseOffsetX) * noiseScale, (z + noiseOffsetZ) * noiseScale) * heightVariation;
 
+                Vector3 blockPosition = new Vector3(x, Mathf.Floor(height), z);
                 // Instantiate block at calculated position
                 Vector3 position = new Vector3(x, height, z);
                 GameObject block = Instantiate(blockPrefab, position, Quaternion.identity);
                 block.transform.SetParent(this.transform);
+                
+                if (blockPrefab == snowBlockPrefab)
+                {
+                    availableSnowPositions.Add(blockPosition);
+                }
             }
         }
     }
@@ -112,6 +124,7 @@ public class TerrainGenerator : MonoBehaviour
                 // Set the block to path height (level 3)
                 Vector3 occupiedPosition = new Vector3(blockPosition.x, 3, blockPosition.z);
                 occupiedPositions.Add(occupiedPosition);
+                AddToOccupiedWithBuffer(occupiedPosition);
 
                 // Instantiate path block at calculated position
                 Instantiate(pathBlockPrefab, occupiedPosition, Quaternion.identity, this.transform);
@@ -201,5 +214,61 @@ void CreatePlatform(Vector3 position)
     {
         navMeshSurface.BuildNavMesh();  // Bake the NavMesh at runtime
     }
+    
+    void GenerateRandomTrees()
+    {
+        int treeCount = 0;
 
+        while (treeCount < maxTrees && availableSnowPositions.Count > 0)
+        {
+            int randomIndex = Random.Range(0, availableSnowPositions.Count);
+            Vector3 treePosition = availableSnowPositions[randomIndex];
+
+            treePosition.y += 1;
+
+            Vector3 checkPosition = new Vector3(treePosition.x, 0, treePosition.z);
+
+            // Check if the tree is trying to be placed on an occupied position or within the 1-block buffer around paths/platforms
+            if (!IsPositionOccupied(checkPosition))
+            {
+                GameObject randomTreePrefab = treePrefabs[Random.Range(0, treePrefabs.Length)];
+                Instantiate(randomTreePrefab, treePosition, Quaternion.identity, this.transform);
+
+                treeCount++;
+            }
+
+            availableSnowPositions.RemoveAt(randomIndex);
+        }
+    }
+
+    // Checks if a given position (ignoring Y) is occupied by paths, platforms, or within the 1-block buffer
+    bool IsPositionOccupied(Vector3 position)
+    {
+        foreach (Vector3 occupied in occupiedPositions)
+        {
+            // We check if the position is within 1 block of any occupied position in the X or Z directions
+            if (Mathf.Abs(occupied.x - position.x) <= 1 && Mathf.Abs(occupied.z - position.z) <= 1)
+            {
+                return true;  // The position or its surrounding area is occupied
+            }
+        }
+        return false;  // The position is free for tree placement
+    }
+
+    // Adds the occupied position and a 1-block buffer around it to the occupiedPositions set
+    void AddToOccupiedWithBuffer(Vector3 position)
+    {
+        occupiedPositions.Add(position);
+
+        // Add surrounding positions to the occupiedPositions set to create the 1-block buffer
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dz = -1; dz <= 1; dz++)
+            {
+                Vector3 bufferedPosition = new Vector3(position.x + dx, position.y, position.z + dz);
+                occupiedPositions.Add(bufferedPosition);
+            }
+        }
+    }
 }
+

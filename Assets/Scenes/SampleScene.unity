@@ -21940,6 +21940,12 @@ MonoBehaviour:
   pathWidth: 3
   platformCountPerSide: 3
   navMeshSurface: {fileID: 2091681139}
+  treePrefabs:
+  - {fileID: 98096134, guid: 80059089911c3984e842c36e5b0b4a6b, type: 3}
+  - {fileID: 621723146, guid: 72b19589989c28b4d8b039588e237f03, type: 3}
+  - {fileID: 572484144, guid: 1cdd095986d005b4a846dac09511da88, type: 3}
+  - {fileID: 1021616414, guid: 61f87bf1de619b4439fa42f930d90883, type: 3}
+  maxTrees: 50
 --- !u!4 &2091681138
 Transform:
   m_ObjectHideFlags: 0
