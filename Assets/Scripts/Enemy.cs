@@ -58,6 +58,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float amount)
     {
         health -= amount;
+        Debug.Log("Enemy health: " + health);
         if (health <= 0f)
         {
             Die();
@@ -66,6 +67,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        Debug.Log("Enemy died");
         Destroy(gameObject); // Destroy the enemy when health reaches 0
     }
 }

@@ -1971,8 +1971,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerHealth: 500
-  attackDamage: 20
-  attackRange: 10
+  attackDamage: 80
+  attackRange: 7
   attackCooldown: 2
 --- !u!65 &6672402522161627198
 BoxCollider:
@@ -1989,12 +1989,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.1312394, y: 7.5487175, z: 5.604057}
-  m_Center: {x: -0.083782546, y: 3.7646341, z: 0.01492989}
+  m_Size: {x: 7.294914, y: 7.5487165, z: 6.790234}
+  m_Center: {x: -0.14049847, y: 3.7646341, z: 0.07097999}
 --- !u!1 &9012153035657588937
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,6 +41,7 @@ public class Tower : MonoBehaviour
         if (enemy != null)
         {
             enemy.TakeDamage(attackDamage);
+            
         }
     }
 
@@ -48,6 +49,8 @@ public class Tower : MonoBehaviour
     public void TakeDamage(float damage)
     {
         towerHealth -= damage;
+
+        Debug.Log("Tower health: " + towerHealth);  
 
         if (towerHealth <= 0f)
         {
