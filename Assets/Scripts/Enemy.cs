@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public float attackRange = 2f;
     public float attackCooldown = 2f;
     public float maxEnemyHealth = 100f;
-    public float currentHealth;
+    public float currentEnemyHealth;
     private Slider healthBarSlider;
     private GameObject healthBarInstance;
 
@@ -27,9 +27,9 @@ public class Enemy : MonoBehaviour
         
         agent = GetComponent<NavMeshAgent>();
         mainTower = GameObject.FindWithTag("MainTower"); // tag the main tower
-        agent.SetDestination(mainTower.transform.position); // Enemy targets the main tower
-        
-        currentHealth = maxEnemyHealth;
+        if (mainTower != null) agent.SetDestination(mainTower.transform.position); // Enemy targets the main tower
+
+        currentEnemyHealth = maxEnemyHealth;
         // Instantiate the health bar and assign it
         healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
 
@@ -38,11 +38,11 @@ public class Enemy : MonoBehaviour
         if (healthBarSlider != null)
         {
             healthBarSlider.maxValue = maxEnemyHealth;
-            healthBarSlider.value = currentHealth;
+            healthBarSlider.value = currentEnemyHealth;
         }
 
         // Parent the health bar to the Canvas 
-        healthBarInstance.transform.SetParent(GameObject.Find("WorldCanvas").transform);
+        healthBarInstance.transform.SetParent(GameObject.Find("Canvas").transform);
     }
 
     void Update()
@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour
         }
 
         // Destroy the health bar when the enemy dies
-        if (currentHealth <= 0 && healthBarInstance != null)
+        if (currentEnemyHealth <= 0 && healthBarInstance != null)
         {
             Destroy(healthBarInstance);
         }
@@ -97,7 +97,7 @@ public class Enemy : MonoBehaviour
         // Update the health bar
         if (healthBarSlider != null)
         {
-            healthBarSlider.value = currentHealth;
+            healthBarSlider.value = currentEnemyHealth;
         }
 
         if (enemyHealth <= 0f)
