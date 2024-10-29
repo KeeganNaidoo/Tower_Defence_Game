@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
 {
     public float baseHealth = 100f;
     public float damage = 10f;
-    public float attackRange = 2f;
+    public float attackRange = 2f;        // Range at which enemy can attack the tower
     public float attackCooldown = 2f;
     public float maxEnemyHealth;
     public float currentEnemyHealth;
@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     public GameObject healthBarPrefab;
     private NavMeshAgent agent;
     private GameObject mainTower;
-    public GameObject coinPrefab;  // Reference to the coin prefab
+    public GameObject coinPrefab;         // Reference to the coin prefab
     private float attackCooldownTimer;
 
     void Start()
@@ -28,8 +28,7 @@ public class Enemy : MonoBehaviour
 
         if (mainTower != null)
         {
-            agent.SetDestination(mainTower.transform.position);
-            agent.stoppingDistance = attackRange - 0.5f;
+            agent.SetDestination(mainTower.transform.position); // Enemy heads towards the main tower
         }
 
         InitializeHealth();
@@ -38,13 +37,13 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (currentEnemyHealth <= 0) return; // Exit update if enemy is dead
+        if (currentEnemyHealth <= 0) return;
 
         if (mainTower != null)
         {
             float distanceToTower = Vector3.Distance(transform.position, mainTower.transform.position);
 
-            // Stop moving if within attack range and start attacking
+            // Check if enemy is within attack range and attack the tower
             if (distanceToTower <= attackRange)
             {
                 agent.isStopped = true;
@@ -72,20 +71,12 @@ public class Enemy : MonoBehaviour
             healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
             healthBarInstance.transform.SetParent(GameObject.Find("Canvas").transform);
         }
-        else
-        {
-            Debug.LogWarning("HealthBarPrefab is not assigned in the inspector for Enemy.");
-        }
 
         healthBarSlider = healthBarInstance?.GetComponentInChildren<Slider>();
         if (healthBarSlider != null)
         {
             healthBarSlider.maxValue = maxEnemyHealth;
             healthBarSlider.value = currentEnemyHealth;
-        }
-        else
-        {
-            Debug.LogWarning("HealthBarSlider is not assigned for this enemy.");
         }
     }
 
@@ -118,7 +109,6 @@ public class Enemy : MonoBehaviour
     {
         currentEnemyHealth -= amount;
 
-        // Update the health bar
         if (healthBarSlider != null)
         {
             healthBarSlider.value = currentEnemyHealth;
@@ -132,9 +122,9 @@ public class Enemy : MonoBehaviour
 
     void HandleDeath()
     {
-        DropCoin();  // Drop a coin on death
-        Destroy(healthBarInstance);  // Destroy the health bar
-        Destroy(gameObject);  // Destroy the enemy object
+        DropCoin();
+        Destroy(healthBarInstance);
+        Destroy(gameObject);
         Debug.Log("Enemy died");
     }
 
@@ -156,18 +146,10 @@ public class Enemy : MonoBehaviour
             healthBarSlider.maxValue = maxEnemyHealth;
             healthBarSlider.value = currentEnemyHealth;
         }
-        else
-        {
-            Debug.LogWarning("HealthBarSlider is not assigned for this enemy.");
-        }
 
         if (agent != null)
         {
             agent.speed *= difficultyMultiplier;
-        }
-        else
-        {
-            Debug.LogWarning("NavMeshAgent component is missing on this enemy.");
         }
     }
 }
