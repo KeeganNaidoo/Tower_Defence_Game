@@ -7141,7 +7141,7 @@ Animator:
   m_GameObject: {fileID: 7349400583634136467}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d1a1ae6328466f84a876805226cc4f43, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 61eaa8c8f1f75114b848bb752fa850fd, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -7166,7 +7166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 0}
   projectileSpawnPoint: {fileID: 0}
-  attackRange: 10
+  attackRange: 5
   attackCooldown: 2
   projectileSpeed: 20
   rotationSpeed: 5
