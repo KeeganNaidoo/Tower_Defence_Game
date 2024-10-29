@@ -7254,7 +7254,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 261}
+  m_AnchoredPosition: {x: 0, y: 181}
   m_SizeDelta: {x: 317.9, y: 44.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &676159160
@@ -18753,6 +18753,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6696852426071125533, guid: d8c1ced9a6da6074689afa083bffda38, type: 3}
   m_PrefabInstance: {fileID: 3928158223202174554}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1064961837 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2370722104503722870, guid: d8c1ced9a6da6074689afa083bffda38, type: 3}
+  m_PrefabInstance: {fileID: 3928158223202174554}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1069524027 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1455688619025213848, guid: ae9c8f311ea3c84449b126ea6db1f5c6, type: 3}
@@ -20240,12 +20251,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1610883109}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 24.552599, y: 10.798531, z: 30.60288}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2091681138}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1610883112
 MonoBehaviour:
@@ -20259,6 +20270,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756be7b18706aa7438cad41ad4e8c17e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coinBalanceText: {fileID: 1750324735}
+  mainTowerHealthText: {fileID: 1064961837}
 --- !u!114 &1610883113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20826,6 +20839,17 @@ Transform:
   - {fileID: 1808368050}
   m_Father: {fileID: 1803238161}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1750324735 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 840067218231004041, guid: 11d47eb28b8465d4f9c41cd64bde674a, type: 3}
+  m_PrefabInstance: {fileID: 5475002305336027203}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1759977286
 GameObject:
   m_ObjectHideFlags: 0
@@ -22290,7 +22314,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1610883111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2091681139
@@ -22749,7 +22774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8033424283273705080, guid: 11d47eb28b8465d4f9c41cd64bde674a, type: 3}
       propertyPath: m_Name
-      value: MainTowerHealthText
+      value: CoinsText
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22763,7 +22788,6 @@ SceneRoots:
   - {fileID: 963194228}
   - {fileID: 705507995}
   - {fileID: 2091681138}
-  - {fileID: 1610883111}
   - {fileID: 1924371177}
   - {fileID: 937422312}
   - {fileID: 1420152372}

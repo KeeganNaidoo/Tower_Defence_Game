@@ -2099,8 +2099,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.337, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5338810321804793658}
   - {fileID: 7846597328748055966}
@@ -2191,3 +2191,4 @@ MonoBehaviour:
   maxEnemyHealth: 200
   currentEnemyHealth: 0
   healthBarPrefab: {fileID: 2922250191661546150, guid: af75ceee16d8c3145ae49d7242c7c527, type: 3}
+  coinPrefab: {fileID: 1401821474702656, guid: 40622103d618b1e43b3c9ea67ff0a1e3, type: 3}
