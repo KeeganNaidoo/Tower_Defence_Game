@@ -4,105 +4,97 @@ using UnityEngine;
 
 public class DefenderPlacement : MonoBehaviour
 {
-    [Header("Defender Prefab")]
-    public GameObject defenderPrefab;  // Prefab for the defender to place
+    public GameObject archerDefenderPrefab;
+    public GameObject mageDefenderPrefab;
+    private GameObject selectedDefenderPrefab;
 
-    [Header("References")]
-    public Camera mainCamera;           // Reference to the main camera
-    public TerrainGenerator terrainGenerator;  // Reference to the TerrainGenerator script to get platform positions
+    public Camera mainCamera;
+    public TerrainGenerator terrainGenerator;
 
-    private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();  // Track occupied platforms
-    private const float platformHeight = 3f; // Height of the platform
-    private const float tolerance = 1f;  // Tolerance for position comparison
+    private HashSet<Vector3> occupiedPositions = new HashSet<Vector3>();
+    private const float platformHeight = 3f;
+    private const float tolerance = 1f;
 
     void Start()
     {
-        // Initialize the camera if not set
+        // Set default defender to Archer Defender
+        if (archerDefenderPrefab != null)
+        {
+            selectedDefenderPrefab = archerDefenderPrefab;
+        }
+        else
+        {
+            Debug.LogError("Archer Defender Prefab is not assigned in the Inspector.");
+        }
+
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
         }
 
-        // Get already occupied positions from the TerrainGenerator
         occupiedPositions = terrainGenerator.occupiedPositions;
     }
 
     void Update()
     {
-        // Check for left mouse button click
+        // Left click to place Archer Defender
         if (Input.GetMouseButtonDown(0))
         {
+            selectedDefenderPrefab = archerDefenderPrefab;
+            PlaceDefender();
+        }
+
+        // Right click to place Mage Defender
+        if (Input.GetMouseButtonDown(1))
+        {
+            selectedDefenderPrefab = mageDefenderPrefab;
             PlaceDefender();
         }
     }
 
     void PlaceDefender()
     {
-        // Cast a ray from the camera to where the player clicked
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        // Draw the ray in the Scene view for debugging
-        Debug.DrawRay(ray.origin, ray.direction * 100, Color.green, 2f);  // Visible for 2 seconds
-
-        // If the ray hits something
         if (Physics.Raycast(ray, out hit))
         {
             Vector3 clickedPosition = hit.point;
             Vector3 roundedPosition = new Vector3(
                 Mathf.Round(clickedPosition.x),
-                platformHeight,  // This remains the same for checking valid platforms
+                platformHeight,
                 Mathf.Round(clickedPosition.z)
             );
 
-            // Debug: Log the position clicked and rounded
-            Debug.Log($"Raycast hit at position: {clickedPosition}");
-            Debug.Log($"Rounded platform position: {roundedPosition}");
-
-            // Check if the clicked position is a valid platform
-            if (IsPositionValid(roundedPosition))
+            if (IsPositionValid(roundedPosition) && !occupiedPositions.Contains(roundedPosition))
             {
-                // Debug: Valid platform message
-                Debug.Log("Valid platform detected!");
+                Vector3 placementPosition = new Vector3(
+                    roundedPosition.x,
+                    platformHeight + 2.0f,
+                    roundedPosition.z
+                );
 
-                // Check if the platform is already occupied by a defender
-                if (!occupiedPositions.Contains(roundedPosition))
+                // Check if the selected defender prefab is assigned
+                if (selectedDefenderPrefab != null)
                 {
-                    // Add a slight height offset to ensure the defender is above the platform
-                    Vector3 placementPosition = new Vector3(
-                        roundedPosition.x,
-                        platformHeight + 2.0f,  // Adjust Y-axis to place the defender slightly above the platform
-                        roundedPosition.z
-                    );
-
-                    // Place a defender on the platform
-                    Instantiate(defenderPrefab, placementPosition, Quaternion.identity);
-
-                    // Mark this platform as occupied
+                    Instantiate(selectedDefenderPrefab, placementPosition, Quaternion.identity);
                     occupiedPositions.Add(roundedPosition);
-
-                    // Debug: Defender placed message
                     Debug.Log("Defender placed!");
                 }
                 else
                 {
-                    Debug.Log("Platform already occupied by a defender.");
+                    Debug.LogError("Selected defender prefab is not assigned.");
                 }
             }
             else
             {
-                Debug.Log("Invalid placement. You must place defenders on the designated platforms.");
+                Debug.Log("Platform already occupied or invalid position.");
             }
-        }
-        else
-        {
-            Debug.Log("Raycast did not hit any object.");
         }
     }
 
     bool IsPositionValid(Vector3 position)
     {
-        // Check if the position is within a tolerance of any occupied position
         foreach (Vector3 occupied in occupiedPositions)
         {
             if (Mathf.Abs(position.x - occupied.x) <= tolerance &&
@@ -114,6 +106,4 @@ public class DefenderPlacement : MonoBehaviour
         }
         return false;
     }
-
-    // The IsPlatformOccupied method is no longer needed as we are tracking positions in occupiedPositions set
 }

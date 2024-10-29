@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
@@ -16,21 +15,21 @@ public class Enemy : MonoBehaviour
     private Slider healthBarSlider;
     private GameObject healthBarInstance;
 
-    public GameObject healthBarPrefab;  // The prefab with the health bar
+    public GameObject healthBarPrefab;
     private NavMeshAgent agent;
     private GameObject mainTower;
     private float attackCooldownTimer;
 
     void Start()
     {
-        
-        
         agent = GetComponent<NavMeshAgent>();
         mainTower = GameObject.FindWithTag("MainTower"); // tag the main tower
-        if (mainTower != null) agent.SetDestination(mainTower.transform.position); // Enemy targets the main tower
+        if (mainTower != null) agent.SetDestination(mainTower.transform.position);
 
         currentEnemyHealth = maxEnemyHealth;
-        // Instantiate the health bar and assign it
+        enemyHealth = maxEnemyHealth;  // Set initial health values
+
+        // Instantiate the health bar
         healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
 
         // Set the health bar's slider
@@ -49,7 +48,6 @@ public class Enemy : MonoBehaviour
     {
         if (mainTower != null)
         {
-            // Check distance to the main tower
             float distance = Vector3.Distance(transform.position, mainTower.transform.position);
 
             if (distance <= attackRange)
@@ -57,7 +55,8 @@ public class Enemy : MonoBehaviour
                 AttackTower();
             }
         }
-        // Update the health bar's position to follow the enemy
+
+        // Update health bar position to follow enemy
         if (healthBarInstance != null)
         {
             healthBarInstance.transform.position = transform.position + new Vector3(0, 2, 0);
@@ -74,14 +73,12 @@ public class Enemy : MonoBehaviour
     {
         if (attackCooldownTimer <= 0f)
         {
-            // Find the tower script and deal damage to it
             Tower tower = mainTower.GetComponent<Tower>();
             if (tower != null)
             {
                 tower.TakeDamage(damage);
             }
 
-            // Reset cooldown timer
             attackCooldownTimer = attackCooldown;
         }
         else
@@ -92,7 +89,8 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        enemyHealth -= damage;
+        enemyHealth -= amount;
+        currentEnemyHealth = enemyHealth;  // Sync current health
 
         // Update the health bar
         if (healthBarSlider != null)
@@ -106,6 +104,4 @@ public class Enemy : MonoBehaviour
             Debug.Log("Enemy died");
         }
     }
-
-    
 }
