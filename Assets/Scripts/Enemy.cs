@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour
 {
     public float baseHealth = 100f;
     public float damage = 10f;
-    public float attackRange = 2f;         // Distance at which enemy stops to attack
+    public float attackRange = 2f;
     public float attackCooldown = 2f;
     public float maxEnemyHealth;
     public float currentEnemyHealth;
@@ -18,25 +18,28 @@ public class Enemy : MonoBehaviour
     public GameObject healthBarPrefab;
     private NavMeshAgent agent;
     private GameObject mainTower;
+    public GameObject coinPrefab;  // Reference to the coin prefab
     private float attackCooldownTimer;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        mainTower = GameObject.FindWithTag("MainTower");  // Ensure the tower is tagged properly
+        mainTower = GameObject.FindWithTag("MainTower");
 
         if (mainTower != null)
         {
             agent.SetDestination(mainTower.transform.position);
-            agent.stoppingDistance = attackRange - 0.5f;  // Ensure enemy stops slightly before attack range
+            agent.stoppingDistance = attackRange - 0.5f;
         }
 
-        InitializeHealth();  // Set initial health values
-        InitializeHealthBar();  // Set up health bar UI
+        InitializeHealth();
+        InitializeHealthBar();
     }
 
     void Update()
     {
+        if (currentEnemyHealth <= 0) return; // Exit update if enemy is dead
+
         if (mainTower != null)
         {
             float distanceToTower = Vector3.Distance(transform.position, mainTower.transform.position);
@@ -49,40 +52,32 @@ public class Enemy : MonoBehaviour
             }
             else
             {
-                agent.isStopped = false;  // Resume movement if outside attack range
+                agent.isStopped = false;
             }
         }
 
         UpdateHealthBarPosition();
-
-        // Destroy health bar if enemy dies
-        if (currentEnemyHealth <= 0 && healthBarInstance != null)
-        {
-            Destroy(healthBarInstance);
-        }
     }
 
     void InitializeHealth()
     {
-        // Set health values at the start
         maxEnemyHealth = baseHealth;
         currentEnemyHealth = maxEnemyHealth;
     }
 
     void InitializeHealthBar()
     {
-        // Check if health bar prefab is assigned and create it
         if (healthBarPrefab != null)
         {
             healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+            healthBarInstance.transform.SetParent(GameObject.Find("Canvas").transform);
         }
         else
         {
             Debug.LogWarning("HealthBarPrefab is not assigned in the inspector for Enemy.");
         }
 
-        // Set up the health bar slider
-        healthBarSlider = healthBarInstance.GetComponentInChildren<Slider>();
+        healthBarSlider = healthBarInstance?.GetComponentInChildren<Slider>();
         if (healthBarSlider != null)
         {
             healthBarSlider.maxValue = maxEnemyHealth;
@@ -92,9 +87,6 @@ public class Enemy : MonoBehaviour
         {
             Debug.LogWarning("HealthBarSlider is not assigned for this enemy.");
         }
-
-        // Attach the health bar to the canvas
-        healthBarInstance.transform.SetParent(GameObject.Find("Canvas").transform);
     }
 
     void UpdateHealthBarPosition()
@@ -134,18 +126,31 @@ public class Enemy : MonoBehaviour
 
         if (currentEnemyHealth <= 0f)
         {
-            Destroy(gameObject);
-            Debug.Log("Enemy died");
+            HandleDeath();
+        }
+    }
+
+    void HandleDeath()
+    {
+        DropCoin();  // Drop a coin on death
+        Destroy(healthBarInstance);  // Destroy the health bar
+        Destroy(gameObject);  // Destroy the enemy object
+        Debug.Log("Enemy died");
+    }
+
+    void DropCoin()
+    {
+        if (coinPrefab != null)
+        {
+            Instantiate(coinPrefab, transform.position, Quaternion.identity);
         }
     }
 
     public void InitializeEnemyStats(float difficultyMultiplier)
     {
-        // Set health and speed based on difficulty multiplier
         maxEnemyHealth = baseHealth * difficultyMultiplier;
         currentEnemyHealth = maxEnemyHealth;
 
-        // Ensure healthBarSlider is not null before setting values
         if (healthBarSlider != null)
         {
             healthBarSlider.maxValue = maxEnemyHealth;
@@ -156,7 +161,6 @@ public class Enemy : MonoBehaviour
             Debug.LogWarning("HealthBarSlider is not assigned for this enemy.");
         }
 
-        // Adjust speed based on difficulty multiplier
         if (agent != null)
         {
             agent.speed *= difficultyMultiplier;
@@ -167,3 +171,4 @@ public class Enemy : MonoBehaviour
         }
     }
 }
+
