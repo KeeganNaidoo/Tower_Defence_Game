@@ -394,7 +394,7 @@ GameObject:
   - component: {fileID: 2972966199692476632}
   - component: {fileID: -5679374701676330151}
   m_Layer: 3
-  m_Name: mini simple skeleton demo_01
+  m_Name: Enemy 1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
