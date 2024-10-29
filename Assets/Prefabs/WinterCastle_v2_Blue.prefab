@@ -1800,6 +1800,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7780893216778294082
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4242822721014956104}
+  m_Layer: 0
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4242822721014956104
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7780893216778294082}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -1, z: 0, w: 0.0000028461216}
+  m_LocalPosition: {x: 0.1, y: 9.47, z: 0.01}
+  m_LocalScale: {x: 1.6666665, y: 1.6666665, z: 1.6666665}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8947477974404155545}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7826882478957959315
 GameObject:
   m_ObjectHideFlags: 0
@@ -1877,6 +1908,7 @@ GameObject:
   - component: {fileID: 8947477974401731193}
   - component: {fileID: -3425837285026030177}
   - component: {fileID: 6672402522161627198}
+  - component: {fileID: 3733337433055722289}
   m_Layer: 0
   m_Name: WinterCastle_v2_Blue
   m_TagString: MainTower
@@ -1906,6 +1938,7 @@ Transform:
   - {fileID: 4911384931487676378}
   - {fileID: 6276645726639407400}
   - {fileID: 2241198278284289109}
+  - {fileID: 4242822721014956104}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180.00002, z: 0}
 --- !u!33 &8947477974400731321
@@ -1972,11 +2005,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerHealth: 500
   maxTowerHealth: 500
-  attackDamage: 80
-  attackRange: 7
+  attackDamage: 50
+  attackRange: 5
   attackCooldown: 2
+  projectilePrefab: {fileID: 4993962407259203142, guid: 34779085ed478314caff71f549e830c1, type: 3}
   towerHealthBar: {fileID: 7458273212032259364, guid: ae9c8f311ea3c84449b126ea6db1f5c6, type: 3}
-  towerHealthText: {fileID: 0}
+  towerHealthText: {fileID: 3747279983583609891, guid: 0d5c85d97a4c3b3488a176042e5349dd, type: 3}
 --- !u!65 &6672402522161627198
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1998,6 +2032,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.294914, y: 7.5487165, z: 6.790234}
   m_Center: {x: -0.14049847, y: 3.7646341, z: 0.07097999}
+--- !u!208 &3733337433055722289
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8947477974403929273}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.49, y: 3.205, z: 2.24}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.08400001, y: 3.765, z: 0.015000001}
+  m_TimeToStationary: 0.5
 --- !u!1 &9012153035657588937
 GameObject:
   m_ObjectHideFlags: 0
