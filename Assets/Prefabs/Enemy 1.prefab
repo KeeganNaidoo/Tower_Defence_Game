@@ -454,7 +454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseHealth: 100
-  damage: 10
+  damage: 5
   attackRange: 2
   attackCooldown: 2
   maxEnemyHealth: 100

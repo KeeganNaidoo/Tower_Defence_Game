@@ -17967,7 +17967,6 @@ GameObject:
   - component: {fileID: 937422312}
   - component: {fileID: 937422311}
   - component: {fileID: 937422310}
-  - component: {fileID: 937422313}
   m_Layer: 0
   m_Name: WinterCastle_v2_Red(Clone) (1)
   m_TagString: Untagged
@@ -18049,24 +18048,6 @@ Transform:
   - {fileID: 737982833}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!114 &937422313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 937422309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e60ebd67ba5bf1041884e23cce12e90d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyPrefabs: []
-  spawnLocations:
-  - {fileID: 937422312}
-  initialEnemyCount: 5
-  spawnInterval: 5
-  waveInterval: 5
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -19403,7 +19384,6 @@ GameObject:
   - component: {fileID: 1420152372}
   - component: {fileID: 1420152371}
   - component: {fileID: 1420152370}
-  - component: {fileID: 1420152373}
   m_Layer: 0
   m_Name: WinterCastle_v2_Red(Clone) (3)
   m_TagString: Untagged
@@ -19485,24 +19465,6 @@ Transform:
   - {fileID: 534067528}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
---- !u!114 &1420152373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1420152369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e60ebd67ba5bf1041884e23cce12e90d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyPrefabs: []
-  spawnLocations:
-  - {fileID: 1420152372}
-  initialEnemyCount: 5
-  spawnInterval: 5
-  waveInterval: 5
 --- !u!1 &1423168598
 GameObject:
   m_ObjectHideFlags: 0
@@ -20312,6 +20274,7 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 3136820629370392942, guid: 62dcba975a0bdfe47bef48ea43049412, type: 3}
   - {fileID: 1845742921716089003, guid: 20818fda9cf85f94ca4d9803d50fb8d8, type: 3}
+  - {fileID: 9137032837993464747, guid: d66c23583a584ef4195dbea312c0b2a7, type: 3}
   spawnLocations:
   - {fileID: 1924371177}
   - {fileID: 937422312}
@@ -21544,7 +21507,6 @@ GameObject:
   - component: {fileID: 1924371177}
   - component: {fileID: 1924371176}
   - component: {fileID: 1924371175}
-  - component: {fileID: 1924371178}
   m_Layer: 0
   m_Name: WinterCastle_v2_Red(Clone) (2)
   m_TagString: Untagged
@@ -21626,24 +21588,6 @@ Transform:
   - {fileID: 853906917}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180.00002, z: 0}
---- !u!114 &1924371178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1924371174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e60ebd67ba5bf1041884e23cce12e90d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyPrefabs: []
-  spawnLocations:
-  - {fileID: 1924371177}
-  initialEnemyCount: 5
-  spawnInterval: 5
-  waveInterval: 5
 --- !u!1 &1930903686
 GameObject:
   m_ObjectHideFlags: 0
