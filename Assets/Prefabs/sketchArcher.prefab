@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8042975370787240287}
   - component: {fileID: 8758443443747551198}
   - component: {fileID: 2280323121868930098}
+  - component: {fileID: -7455789731711893717}
   m_Layer: 0
   m_Name: sketchArcher
   m_TagString: Defender
@@ -112,6 +113,27 @@ MonoBehaviour:
   projectileSpeed: 20
   rotationSpeed: 5
   hp: 50
+--- !u!95 &-7455789731711893717
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5459650239087229939}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 13c8dbbd487722241ac1cb3d90d603fb, type: 3}
+  m_Controller: {fileID: 9100000, guid: a950897ad8cc0db49a02b5aa71ceae99, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8948377733248605055
 GameObject:
   m_ObjectHideFlags: 0
