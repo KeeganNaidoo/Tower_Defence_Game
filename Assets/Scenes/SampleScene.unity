@@ -18061,11 +18061,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60ebd67ba5bf1041884e23cce12e90d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 3136820629370392942, guid: 62dcba975a0bdfe47bef48ea43049412, type: 3}
-  enemyHealthBarPrefab: {fileID: 2922250191661546150, guid: af75ceee16d8c3145ae49d7242c7c527, type: 3}
+  enemyPrefabs: []
   spawnLocations:
   - {fileID: 937422312}
+  initialEnemyCount: 5
   spawnInterval: 5
+  waveInterval: 5
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -18771,17 +18772,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6696852426071125533, guid: d8c1ced9a6da6074689afa083bffda38, type: 3}
   m_PrefabInstance: {fileID: 3928158223202174554}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1064961837 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2370722104503722870, guid: d8c1ced9a6da6074689afa083bffda38, type: 3}
-  m_PrefabInstance: {fileID: 3928158223202174554}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1069524027 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1455688619025213848, guid: ae9c8f311ea3c84449b126ea6db1f5c6, type: 3}
@@ -19507,11 +19497,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60ebd67ba5bf1041884e23cce12e90d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 3136820629370392942, guid: 62dcba975a0bdfe47bef48ea43049412, type: 3}
-  enemyHealthBarPrefab: {fileID: 2922250191661546150, guid: af75ceee16d8c3145ae49d7242c7c527, type: 3}
+  enemyPrefabs: []
   spawnLocations:
   - {fileID: 1420152372}
+  initialEnemyCount: 5
   spawnInterval: 5
+  waveInterval: 5
 --- !u!1 &1423168598
 GameObject:
   m_ObjectHideFlags: 0
@@ -20255,6 +20246,7 @@ GameObject:
   - component: {fileID: 1610883111}
   - component: {fileID: 1610883110}
   - component: {fileID: 1610883112}
+  - component: {fileID: 1610883113}
   m_Layer: 0
   m_Name: GameManger
   m_TagString: Untagged
@@ -20305,7 +20297,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756be7b18706aa7438cad41ad4e8c17e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesAliveText: {fileID: 1064961837}
+--- !u!114 &1610883113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610883109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e60ebd67ba5bf1041884e23cce12e90d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefabs:
+  - {fileID: 3136820629370392942, guid: 62dcba975a0bdfe47bef48ea43049412, type: 3}
+  - {fileID: 1845742921716089003, guid: 20818fda9cf85f94ca4d9803d50fb8d8, type: 3}
+  spawnLocations:
+  - {fileID: 1924371177}
+  - {fileID: 937422312}
+  - {fileID: 1420152372}
+  initialEnemyCount: 5
+  spawnInterval: 2
+  waveInterval: 5
 --- !u!1 &1612374171
 GameObject:
   m_ObjectHideFlags: 0
@@ -21625,11 +21638,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60ebd67ba5bf1041884e23cce12e90d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 3136820629370392942, guid: 62dcba975a0bdfe47bef48ea43049412, type: 3}
-  enemyHealthBarPrefab: {fileID: 2922250191661546150, guid: af75ceee16d8c3145ae49d7242c7c527, type: 3}
+  enemyPrefabs: []
   spawnLocations:
   - {fileID: 1924371177}
+  initialEnemyCount: 5
   spawnInterval: 5
+  waveInterval: 5
 --- !u!1 &1930903686
 GameObject:
   m_ObjectHideFlags: 0

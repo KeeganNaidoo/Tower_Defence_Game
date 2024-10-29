@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
-    public float enemyHealth = 100f;
+    public float baseHealth = 100f;
     public float damage = 10f;
     public float attackRange = 2f;
     public float attackCooldown = 2f;
-    public float maxEnemyHealth = 100f;
+    public float maxEnemyHealth;
     public float currentEnemyHealth;
     private Slider healthBarSlider;
     private GameObject healthBarInstance;
@@ -26,13 +26,16 @@ public class Enemy : MonoBehaviour
         mainTower = GameObject.FindWithTag("MainTower"); // tag the main tower
         if (mainTower != null) agent.SetDestination(mainTower.transform.position);
 
-        currentEnemyHealth = maxEnemyHealth;
-        enemyHealth = maxEnemyHealth;  // Set initial health values
+        if (healthBarPrefab != null) // Check if healthBarPrefab is assigned
+        {
+            healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogWarning("HealthBarPrefab is not assigned in the inspector for Enemy.");
+        }
 
-        // Instantiate the health bar
-        healthBarInstance = Instantiate(healthBarPrefab, transform.position + new Vector3(0, 2, 0), Quaternion.identity);
-
-        // Set the health bar's slider
+        // Set up the health bar slider
         healthBarSlider = healthBarInstance.GetComponentInChildren<Slider>();
         if (healthBarSlider != null)
         {
@@ -40,7 +43,7 @@ public class Enemy : MonoBehaviour
             healthBarSlider.value = currentEnemyHealth;
         }
 
-        // Parent the health bar to the Canvas 
+        // Attach the health bar to the canvas
         healthBarInstance.transform.SetParent(GameObject.Find("Canvas").transform);
     }
 
@@ -50,19 +53,20 @@ public class Enemy : MonoBehaviour
         {
             float distance = Vector3.Distance(transform.position, mainTower.transform.position);
 
+            // Attack the tower if within range
             if (distance <= attackRange)
             {
                 AttackTower();
             }
         }
 
-        // Update health bar position to follow enemy
+        // Update health bar position to follow the enemy
         if (healthBarInstance != null)
         {
             healthBarInstance.transform.position = transform.position + new Vector3(0, 2, 0);
         }
 
-        // Destroy the health bar when the enemy dies
+        // Destroy health bar if enemy dies
         if (currentEnemyHealth <= 0 && healthBarInstance != null)
         {
             Destroy(healthBarInstance);
@@ -78,7 +82,6 @@ public class Enemy : MonoBehaviour
             {
                 tower.TakeDamage(damage);
             }
-
             attackCooldownTimer = attackCooldown;
         }
         else
@@ -89,8 +92,7 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
-        enemyHealth -= amount;
-        currentEnemyHealth = enemyHealth;  // Sync current health
+        currentEnemyHealth -= amount;
 
         // Update the health bar
         if (healthBarSlider != null)
@@ -98,10 +100,39 @@ public class Enemy : MonoBehaviour
             healthBarSlider.value = currentEnemyHealth;
         }
 
-        if (enemyHealth <= 0f)
+        if (currentEnemyHealth <= 0f)
         {
             Destroy(gameObject);
             Debug.Log("Enemy died");
         }
     }
+
+    public void InitializeEnemyStats(float difficultyMultiplier)
+    {
+        // Set health values based on difficulty multiplier
+        maxEnemyHealth = baseHealth * difficultyMultiplier;
+        currentEnemyHealth = maxEnemyHealth;
+
+        // Ensure healthBarSlider is not null before setting values
+        if (healthBarSlider != null)
+        {
+            healthBarSlider.maxValue = maxEnemyHealth;
+            healthBarSlider.value = currentEnemyHealth;
+        }
+        else
+        {
+            Debug.LogWarning("HealthBarSlider is not assigned for this enemy.");
+        }
+
+        // Ensure agent is not null before adjusting speed
+        if (agent != null)
+        {
+            agent.speed *= difficultyMultiplier;
+        }
+        else
+        {
+            Debug.LogWarning("NavMeshAgent component is missing on this enemy.");
+        }
+    }
+
 }
