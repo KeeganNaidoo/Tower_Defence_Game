@@ -103,12 +103,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e60ebd67ba5bf1041884e23cce12e90d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 1037984247}
+  enemyPrefabs: []
   spawnLocations:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  initialEnemyCount: 5
   spawnInterval: 5
+  waveInterval: 5
 --- !u!1001 &21955386
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -278,16 +280,28 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c4d02b46eb54340419e128b1878e70ee, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2.5468
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c4d02b46eb54340419e128b1878e70ee, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.5468
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c4d02b46eb54340419e128b1878e70ee, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.5468
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: c4d02b46eb54340419e128b1878e70ee, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0034309577
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c4d02b46eb54340419e128b1878e70ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.0624566
+      value: 1.57
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c4d02b46eb54340419e128b1878e70ee, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.7390633
+      value: 1.91
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c4d02b46eb54340419e128b1878e70ee, type: 3}
       propertyPath: m_LocalRotation.w
