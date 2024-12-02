@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;  // For UI elements
 
 public class Defender : MonoBehaviour
 {
@@ -9,9 +10,22 @@ public class Defender : MonoBehaviour
     public float projectileSpeed = 20f;
     public float rotationSpeed = 5f;
     public float hp = 50f;
+    public float damage = 10f; // Added damage stat
+    public float attackSpeed = 1f;  // Attack speed stat
+
+    // UI Elements to display stats
+    public Text defenderHealthText;
+    public Text defenderAttackSpeedText;
+    public Text defenderDamageText;
 
     private float attackCooldownTimer;
     private Transform currentTarget;
+
+    void Start()
+    {
+        // Display initial stats in UI
+        UpdateDefenderStatsUI();
+    }
 
     void Update()
     {
@@ -57,6 +71,7 @@ public class Defender : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        UpdateDefenderStatsUI();  // Update UI after taking damage
     }
 
     void FindTarget()
@@ -77,10 +92,26 @@ public class Defender : MonoBehaviour
     {
         hp += upgradeData.healthIncrease;
         attackCooldown -= upgradeData.attackSpeedIncrease;
+        damage += upgradeData.defenseIncrease;  // Update damage based on upgrade
         if (upgradeData.upgradedPrefab != null)
         {
             Instantiate(upgradeData.upgradedPrefab, transform.position, transform.rotation);
             Destroy(gameObject);  // Replace with upgraded prefab
         }
+
+        UpdateDefenderStatsUI();  // Update UI after upgrade
+    }
+
+    // Update the displayed stats on the UI
+    void UpdateDefenderStatsUI()
+    {
+        if (defenderHealthText != null)
+            defenderHealthText.text = "Health: " + hp.ToString();
+
+        if (defenderAttackSpeedText != null)
+            defenderAttackSpeedText.text = "Attack Speed: " + attackSpeed.ToString("F2");
+
+        if (defenderDamageText != null)
+            defenderDamageText.text = "Damage: " + damage.ToString("F2");
     }
 }
