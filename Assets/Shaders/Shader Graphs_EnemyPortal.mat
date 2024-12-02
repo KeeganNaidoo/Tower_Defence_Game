@@ -36,11 +36,11 @@ Material:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
     - _Brightness: 2
-    - _Density: 3
+    - _Density: 2.5
     - _Speed: 0.2
     - _Strength: 10
     m_Colors:
-    - _Color: {r: 256, g: 256, b: 256, a: 0}
+    - _Color: {r: 332.10703, g: 20.365063, b: 20.365063, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &2924179000008900034
 MonoBehaviour:
