@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;  // For UI elements
+using UnityEngine.UI;
 
 public class Tower : MonoBehaviour
 {
@@ -10,7 +10,6 @@ public class Tower : MonoBehaviour
     public float attackCooldown = 2f;
     public Slider towerHealthBar;
     public Text towerHealthText;
-    public Text towerDamageText;
 
     private float attackCooldownTimer;
 
@@ -25,11 +24,6 @@ public class Tower : MonoBehaviour
         if (towerHealthText != null)
         {
             towerHealthText.text = $"Health: {towerHealth}/{maxTowerHealth}";
-        }
-
-        if (towerDamageText != null)
-        {
-            towerDamageText.text = $"Damage: {attackDamage}";
         }
     }
 
@@ -61,11 +55,6 @@ public class Tower : MonoBehaviour
         {
             towerHealthText.text = $"Health: {towerHealth}/{maxTowerHealth}";
         }
-
-        if (towerDamageText != null)
-        {
-            towerDamageText.text = $"Damage: {attackDamage}";
-        }
     }
 
     void AttackEnemy(Enemy enemy)
@@ -80,7 +69,6 @@ public class Tower : MonoBehaviour
         {
             DestroyTower();
         }
-        UpdateTowerStatsUI();  // Update UI after taking damage
     }
 
     void DestroyTower()
@@ -100,17 +88,5 @@ public class Tower : MonoBehaviour
             Instantiate(upgradeData.upgradedPrefab, transform.position, transform.rotation);
             Destroy(gameObject);  // Replace with upgraded prefab
         }
-
-        UpdateTowerStatsUI();  // Update UI after upgrade
-    }
-
-    // Update the displayed stats on the UI
-    void UpdateTowerStatsUI()
-    {
-        if (towerHealthText != null)
-            towerHealthText.text = $"Health: {towerHealth}/{maxTowerHealth}";
-
-        if (towerDamageText != null)
-            towerDamageText.text = $"Damage: {attackDamage.ToString("F2")}";
     }
 }
