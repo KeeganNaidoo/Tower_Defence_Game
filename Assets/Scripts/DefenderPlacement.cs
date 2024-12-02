@@ -50,6 +50,12 @@ public class DefenderPlacement : MonoBehaviour
             selectedDefenderPrefab = mageDefenderPrefab;
             PlaceDefender();
         }
+
+        // Detect defender selection for upgrades
+        if (Input.GetMouseButtonDown(0)) // Left-click to select defender for upgrades
+        {
+            SelectDefenderForUpgrade();
+        }
     }
 
     void PlaceDefender()
@@ -74,11 +80,14 @@ public class DefenderPlacement : MonoBehaviour
                     roundedPosition.z
                 );
 
-                // Check if the selected defender prefab is assigned
+                // Instantiate the selected defender prefab
                 if (selectedDefenderPrefab != null)
                 {
-                    Instantiate(selectedDefenderPrefab, placementPosition, Quaternion.identity);
+                    GameObject defender = Instantiate(selectedDefenderPrefab, placementPosition, Quaternion.identity);
                     occupiedPositions.Add(roundedPosition);
+
+                    // Add an OnClick method to this defender to select it for upgrades
+                    defender.AddComponent<DefenderClickHandler>().InitializeForUpgrade();
                     Debug.Log("Defender placed!");
                 }
                 else
@@ -105,5 +114,26 @@ public class DefenderPlacement : MonoBehaviour
             }
         }
         return false;
+    }
+
+    // Raycast to select a defender for upgrades
+    void SelectDefenderForUpgrade()
+    {
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            Defender defender = hit.collider.GetComponent<Defender>();
+            if (defender != null)
+            {
+                UpgradeUI upgradeUI = FindObjectOfType<UpgradeUI>();
+                if (upgradeUI != null)
+                {
+                    upgradeUI.SelectDefenderForUpgrade(defender);  // Select the clicked defender for upgrades
+                    Debug.Log("Defender selected for upgrades: " + defender.name);
+                }
+            }
+        }
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Defender : MonoBehaviour
@@ -10,7 +8,7 @@ public class Defender : MonoBehaviour
     public float attackCooldown = 2f;
     public float projectileSpeed = 20f;
     public float rotationSpeed = 5f;
-    public float hp = 50f;  // Health of the defender
+    public float hp = 50f;
 
     private float attackCooldownTimer;
     private Transform currentTarget;
@@ -18,22 +16,18 @@ public class Defender : MonoBehaviour
     void Update()
     {
         FindTarget();
-
         if (currentTarget != null)
         {
             RotateTowards(currentTarget);
-
             if (attackCooldownTimer <= 0f)
             {
                 Attack();
                 attackCooldownTimer = attackCooldown;
             }
-
             attackCooldownTimer -= Time.deltaTime;
         }
     }
 
-    // Virtual method to be overridden by specific defender types
     protected virtual void Attack()
     {
         ShootProjectile(currentTarget);
@@ -76,6 +70,17 @@ public class Defender : MonoBehaviour
                 currentTarget = enemy.transform;
                 break;
             }
+        }
+    }
+
+    public void ApplyUpgrade(UpgradeData upgradeData)
+    {
+        hp += upgradeData.healthIncrease;
+        attackCooldown -= upgradeData.attackSpeedIncrease;
+        if (upgradeData.upgradedPrefab != null)
+        {
+            Instantiate(upgradeData.upgradedPrefab, transform.position, transform.rotation);
+            Destroy(gameObject);  // Replace with upgraded prefab
         }
     }
 }
