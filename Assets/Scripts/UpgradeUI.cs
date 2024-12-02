@@ -14,15 +14,6 @@ public class UpgradeUI : MonoBehaviour
     public Button[] towerUpgradeButtons;   // UI Buttons for Tower upgrades
     public Text upgradeStatusText;         // UI Text to display upgrade status (optional)
 
-    // UI Text elements for displaying defender stats
-    public Text defenderHealthText;
-    public Text defenderAttackSpeedText;
-    public Text defenderDamageText;
-
-    // UI Text elements for displaying tower stats
-    public Text towerHealthText;
-    public Text towerDamageText;
-
     void Start()
     {
         // Set up buttons for Archer upgrades
@@ -56,9 +47,6 @@ public class UpgradeUI : MonoBehaviour
         selectedDefender = defender;
         Debug.Log("Defender selected for upgrades: " + defender.name);
 
-        // Update UI for the selected defender's stats
-        UpdateDefenderStatsUI();
-
         // Enable relevant upgrade buttons based on the defender type
         DisableAllUpgradeButtons();
         if (defender is ArcherDefender)  // Archer defender selected
@@ -68,27 +56,6 @@ public class UpgradeUI : MonoBehaviour
         else if (defender is MageDefender)  // Mage defender selected
         {
             EnableButtons(mageUpgradeButtons);
-        }
-    }
-
-    // Update UI to display the selected defender's stats
-    void UpdateDefenderStatsUI()
-    {
-        if (selectedDefender != null)
-        {
-            defenderHealthText.text = "Health: " + selectedDefender.hp.ToString();
-            defenderAttackSpeedText.text = "Attack Speed: " + selectedDefender.attackSpeed.ToString("F2");
-            defenderDamageText.text = "Damage: " + selectedDefender.damage.ToString("F2");
-        }
-    }
-
-    // Update UI to display the tower's stats
-    void UpdateTowerStatsUI()
-    {
-        if (mainTower != null)
-        {
-            towerHealthText.text = "Health: " + mainTower.towerHealth.ToString();
-            towerDamageText.text = "Damage: " + mainTower.attackDamage.ToString("F2");
         }
     }
 
@@ -142,16 +109,6 @@ public class UpgradeUI : MonoBehaviour
             mainTower.ApplyUpgrade(towerUpgrades[upgradeLevel]);
             upgradeApplied = true;
             Debug.Log("Tower upgrade applied: " + towerUpgrades[upgradeLevel].name);  // Log message
-        }
-
-        // Update stats UI after upgrade
-        if (selectedDefender != null)
-        {
-            UpdateDefenderStatsUI();
-        }
-        if (mainTower != null)
-        {
-            UpdateTowerStatsUI();
         }
 
         // Optional: Update the UI to show the upgrade status
