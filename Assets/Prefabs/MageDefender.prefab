@@ -7164,6 +7164,7 @@ GameObject:
   - component: {fileID: 2831847387659400427}
   - component: {fileID: 7521119741053090084}
   - component: {fileID: 890089810566266811}
+  - component: {fileID: 3759049891281841093}
   m_Layer: 0
   m_Name: MageDefender
   m_TagString: Untagged
@@ -7231,6 +7232,27 @@ MonoBehaviour:
   rotationSpeed: 5
   hp: 50
   aoeDamage: 10
+--- !u!65 &3759049891281841093
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7349400583634136467}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7398505, y: 1.815394, z: 1}
+  m_Center: {x: 0.10293615, y: 0.7888095, z: 0}
 --- !u!1 &7697213747372025339
 GameObject:
   m_ObjectHideFlags: 0

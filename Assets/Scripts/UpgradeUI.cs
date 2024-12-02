@@ -5,50 +5,107 @@ public class UpgradeUI : MonoBehaviour
 {
     public Defender selectedDefender;  // The defender selected for upgrades
     public Tower mainTower;
-    public UpgradeData[] defenderUpgrades;  // ScriptableObjects for defender upgrades
-    public UpgradeData[] towerUpgrades;     // ScriptableObjects for tower upgrades
+    public UpgradeData[] archerUpgrades;  // ScriptableObjects for Archer upgrades
+    public UpgradeData[] mageUpgrades;    // ScriptableObjects for Mage upgrades
+    public UpgradeData[] towerUpgrades;   // ScriptableObjects for Tower upgrades
 
-    public Button[] defenderUpgradeButtons;  // UI Buttons for defender upgrades
-    public Button[] towerUpgradeButtons;     // UI Buttons for tower upgrades
-    public Text upgradeStatusText;   // UI Text to display upgrade status (optional)
+    public Button[] archerUpgradeButtons;  // UI Buttons for Archer upgrades
+    public Button[] mageUpgradeButtons;    // UI Buttons for Mage upgrades
+    public Button[] towerUpgradeButtons;   // UI Buttons for Tower upgrades
+    public Text upgradeStatusText;         // UI Text to display upgrade status (optional)
 
     void Start()
     {
-        // Set up each defender upgrade button with the correct upgrade level
-        for (int i = 0; i < defenderUpgradeButtons.Length; i++)
+        // Set up buttons for Archer upgrades
+        for (int i = 0; i < archerUpgradeButtons.Length; i++)
         {
-            int index = i;  // Capture the index for the current button
-            defenderUpgradeButtons[i].onClick.AddListener(() => ApplyUpgrade(index, "defender"));  // Associate each button with its defender upgrade level
+            int index = i;
+            archerUpgradeButtons[i].onClick.AddListener(() => ApplyUpgrade(index, "archer"));
         }
 
-        // Set up each tower upgrade button with the correct upgrade level
+        // Set up buttons for Mage upgrades
+        for (int i = 0; i < mageUpgradeButtons.Length; i++)
+        {
+            int index = i;
+            mageUpgradeButtons[i].onClick.AddListener(() => ApplyUpgrade(index, "mage"));
+        }
+
+        // Set up buttons for Tower upgrades
         for (int i = 0; i < towerUpgradeButtons.Length; i++)
         {
-            int index = i;  // Capture the index for the current button
-            towerUpgradeButtons[i].onClick.AddListener(() => ApplyUpgrade(index, "tower"));  // Associate each button with its tower upgrade level
+            int index = i;
+            towerUpgradeButtons[i].onClick.AddListener(() => ApplyUpgrade(index, "tower"));
+        }
+
+        // Disable all upgrade buttons initially
+        DisableAllUpgradeButtons();
+    }
+
+    // Select the defender for upgrades
+    public void SelectDefenderForUpgrade(Defender defender)
+    {
+        selectedDefender = defender;
+        Debug.Log("Defender selected for upgrades: " + defender.name);
+
+        // Enable relevant upgrade buttons based on the defender type
+        DisableAllUpgradeButtons();
+        if (defender is ArcherDefender)  // Archer defender selected
+        {
+            EnableButtons(archerUpgradeButtons);
+        }
+        else if (defender is MageDefender)  // Mage defender selected
+        {
+            EnableButtons(mageUpgradeButtons);
         }
     }
 
-    public void SelectDefenderForUpgrade(Defender defender)
+    // Enable the appropriate upgrade buttons
+    void EnableButtons(Button[] buttons)
     {
-        // Set the selected defender for upgrades
-        selectedDefender = defender;
+        foreach (Button button in buttons)
+        {
+            button.interactable = true;  // Enable the buttons for the selected defender type
+        }
     }
 
-    public void ApplyUpgrade(int upgradeLevel, string upgradeType)
+    // Disable all upgrade buttons
+    void DisableAllUpgradeButtons()
+    {
+        foreach (Button button in archerUpgradeButtons)
+        {
+            button.interactable = false;  // Disable Archer upgrade buttons
+        }
+
+        foreach (Button button in mageUpgradeButtons)
+        {
+            button.interactable = false;  // Disable Mage upgrade buttons
+        }
+
+        foreach (Button button in towerUpgradeButtons)
+        {
+            button.interactable = true;  // Tower upgrades are always available
+        }
+    }
+
+    // Apply the selected upgrade based on the defender type
+    public void ApplyUpgrade(int upgradeLevel, string defenderType)
     {
         bool upgradeApplied = false;
 
-        if (upgradeType == "defender" && selectedDefender != null && upgradeLevel < defenderUpgrades.Length)
+        if (defenderType == "archer" && selectedDefender != null && upgradeLevel < archerUpgrades.Length)
         {
-            // Apply defender upgrade
-            selectedDefender.ApplyUpgrade(defenderUpgrades[upgradeLevel]);
+            selectedDefender.ApplyUpgrade(archerUpgrades[upgradeLevel]);
             upgradeApplied = true;
-            Debug.Log("Defender upgrade applied: " + defenderUpgrades[upgradeLevel].name);  // Log message
+            Debug.Log("Archer upgrade applied: " + archerUpgrades[upgradeLevel].name);  // Log message
         }
-        else if (upgradeType == "tower" && mainTower != null && upgradeLevel < towerUpgrades.Length)
+        else if (defenderType == "mage" && selectedDefender != null && upgradeLevel < mageUpgrades.Length)
         {
-            // Apply tower upgrade
+            selectedDefender.ApplyUpgrade(mageUpgrades[upgradeLevel]);
+            upgradeApplied = true;
+            Debug.Log("Mage upgrade applied: " + mageUpgrades[upgradeLevel].name);  // Log message
+        }
+        else if (defenderType == "tower" && mainTower != null && upgradeLevel < towerUpgrades.Length)
+        {
             mainTower.ApplyUpgrade(towerUpgrades[upgradeLevel]);
             upgradeApplied = true;
             Debug.Log("Tower upgrade applied: " + towerUpgrades[upgradeLevel].name);  // Log message
