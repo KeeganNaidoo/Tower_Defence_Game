@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI;  // For UI elements
 
 public class Tower : MonoBehaviour
 {
@@ -10,11 +10,14 @@ public class Tower : MonoBehaviour
     public float attackCooldown = 2f;
     public Slider towerHealthBar;
     public Text towerHealthText;
+    public Text towerDamageText;
 
     private float attackCooldownTimer;
 
     void Start()
     {
+        // Initialize the stats on the UI at the start
+        Debug.Log("Initializing Tower Stats...");
         if (towerHealthBar != null)
         {
             towerHealthBar.maxValue = maxTowerHealth;
@@ -24,6 +27,11 @@ public class Tower : MonoBehaviour
         if (towerHealthText != null)
         {
             towerHealthText.text = $"Health: {towerHealth}/{maxTowerHealth}";
+        }
+
+        if (towerDamageText != null)
+        {
+            towerDamageText.text = $"Damage: {attackDamage}";
         }
     }
 
@@ -54,6 +62,13 @@ public class Tower : MonoBehaviour
         if (towerHealthText != null)
         {
             towerHealthText.text = $"Health: {towerHealth}/{maxTowerHealth}";
+            Debug.Log("Tower Health: " + towerHealth);  // Debugging
+        }
+
+        if (towerDamageText != null)
+        {
+            towerDamageText.text = $"Damage: {attackDamage}";
+            Debug.Log("Tower Damage: " + attackDamage);  // Debugging
         }
     }
 
@@ -69,6 +84,7 @@ public class Tower : MonoBehaviour
         {
             DestroyTower();
         }
+        UpdateTowerStatsUI();  // Update UI after taking damage
     }
 
     void DestroyTower()
@@ -88,5 +104,17 @@ public class Tower : MonoBehaviour
             Instantiate(upgradeData.upgradedPrefab, transform.position, transform.rotation);
             Destroy(gameObject);  // Replace with upgraded prefab
         }
+
+        UpdateTowerStatsUI();  // Update UI after upgrade
+    }
+
+    // Update the displayed stats on the UI
+    void UpdateTowerStatsUI()
+    {
+        if (towerHealthText != null)
+            towerHealthText.text = $"Health: {towerHealth}/{maxTowerHealth}";
+
+        if (towerDamageText != null)
+            towerDamageText.text = $"Damage: {attackDamage.ToString("F2")}";
     }
 }
