@@ -18784,7 +18784,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Upgrade Archer
+  m_Text: Upgrade Snowman
 --- !u!222 &998657582
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19974,7 +19974,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Upgrade Snowman Defender
+  m_Text: Upgrade Mage
 --- !u!222 &1431077210
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20733,13 +20733,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedDefender: {fileID: 0}
   mainTower: {fileID: -3425837285026030177, guid: 904d9a1bd2cbee94f983ffa7f6912017, type: 3}
-  defenderUpgrades:
+  archerUpgrades:
   - {fileID: 11400000, guid: 2244a222111f8064d9d2a770d27b2a79, type: 2}
+  mageUpgrades:
   - {fileID: 11400000, guid: a387e805d2449324691317746208eaa3, type: 2}
   towerUpgrades:
   - {fileID: 11400000, guid: c694e65f82a001c4f9ca0305f6b8e0c0, type: 2}
-  defenderUpgradeButtons:
+  archerUpgradeButtons:
   - {fileID: 1907768977}
+  mageUpgradeButtons:
   - {fileID: 1971769352}
   towerUpgradeButtons:
   - {fileID: 1817495003}
@@ -22058,7 +22060,7 @@ GameObject:
   - component: {fileID: 1907768978}
   - component: {fileID: 1907768977}
   m_Layer: 5
-  m_Name: UpgradeDefender1
+  m_Name: UpgradeSnowman
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22563,7 +22565,7 @@ GameObject:
   - component: {fileID: 1971769353}
   - component: {fileID: 1971769352}
   m_Layer: 5
-  m_Name: UpgradeDefender2
+  m_Name: UpgradeMage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23355,7 +23357,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3679939552240708964, guid: 0d5c85d97a4c3b3488a176042e5349dd, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -248
+      value: -340
       objectReference: {fileID: 0}
     - target: {fileID: 3679939552240708964, guid: 0d5c85d97a4c3b3488a176042e5349dd, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -23554,7 +23556,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1455688619025213848, guid: ae9c8f311ea3c84449b126ea6db1f5c6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 446
+      value: 355
       objectReference: {fileID: 0}
     - target: {fileID: 1455688619025213848, guid: ae9c8f311ea3c84449b126ea6db1f5c6, type: 3}
       propertyPath: m_AnchoredPosition.y

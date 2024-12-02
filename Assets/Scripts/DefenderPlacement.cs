@@ -17,7 +17,6 @@ public class DefenderPlacement : MonoBehaviour
 
     void Start()
     {
-        // Set default defender to Archer Defender
         if (archerDefenderPrefab != null)
         {
             selectedDefenderPrefab = archerDefenderPrefab;
@@ -51,7 +50,7 @@ public class DefenderPlacement : MonoBehaviour
             PlaceDefender();
         }
 
-        // Detect defender selection for upgrades
+        // Detect defender selection for upgrades when clicking on placed defenders
         if (Input.GetMouseButtonDown(0)) // Left-click to select defender for upgrades
         {
             SelectDefenderForUpgrade();
@@ -80,13 +79,12 @@ public class DefenderPlacement : MonoBehaviour
                     roundedPosition.z
                 );
 
-                // Instantiate the selected defender prefab
                 if (selectedDefenderPrefab != null)
                 {
                     GameObject defender = Instantiate(selectedDefenderPrefab, placementPosition, Quaternion.identity);
                     occupiedPositions.Add(roundedPosition);
 
-                    // Add an OnClick method to this defender to select it for upgrades
+                    // Add the DefenderClickHandler to allow the defender to be selected
                     defender.AddComponent<DefenderClickHandler>().InitializeForUpgrade();
                     Debug.Log("Defender placed!");
                 }
@@ -116,7 +114,6 @@ public class DefenderPlacement : MonoBehaviour
         return false;
     }
 
-    // Raycast to select a defender for upgrades
     void SelectDefenderForUpgrade()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
